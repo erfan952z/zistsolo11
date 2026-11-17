@@ -2,13 +2,13 @@
 <html lang="fa" dir="rtl" class="dark">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>زیست‌سولو ۱۱ | پلتفرم گیمیفای شده زیست‌شناسی یازدهم</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" rel="stylesheet" type="text/css" />
     <!-- Telegram Mini App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <!-- Supabase SDK (Real-Time Cloud Leaderboard & Cloud Sync) -->
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
@@ -27,19 +27,23 @@
             font-family: 'Vazirmatn', sans-serif;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+            padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
         }
         .glass-card {
-            background: rgba(17, 24, 39, 0.82);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
         html:not(.dark) .glass-card {
-            background: rgba(255, 255, 255, 0.92);
+            background: rgba(255, 255, 255, 0.94);
             border: 1px solid rgba(15, 23, 42, 0.08);
         }
         .neon-glow {
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+            box-shadow: 0 0 22px rgba(16, 185, 129, 0.28);
+        }
+        .duel-glow {
+            box-shadow: 0 0 28px rgba(99, 102, 241, 0.45);
         }
         @keyframes float {
             0%, 100% { transform: translateY(0px); }
@@ -86,20 +90,20 @@
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen pb-24 transition-colors duration-200 select-none">
+<body class="bg-slate-100 text-slate-900 dark:bg-[#070b14] dark:text-slate-100 min-h-screen transition-colors duration-200 select-none">
 
     <!-- TOP HUD BAR -->
     <header class="sticky top-0 z-40 glass-card border-b border-slate-200/80 dark:border-slate-800/90 px-3 py-2.5 shadow-sm">
         <div class="max-w-3xl mx-auto flex items-center justify-between gap-2">
             <!-- User Avatar & Level -->
-            <div onclick="switchTab('profile')" class="flex items-center gap-2.5 cursor-pointer group">
-                <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 p-0.5 shadow-md group-hover:scale-105 transition">
+            <div onclick="switchTab('profile')" class="flex items-center gap-2.5 cursor-pointer group min-w-0">
+                <div class="relative w-11 h-11 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-700 p-0.5 shadow-md group-hover:scale-105 transition shrink-0">
                     <div id="hud-avatar" class="w-full h-full rounded-[14px] bg-slate-900 flex items-center justify-center text-2xl">🧬</div>
                     <span id="hud-level-badge" class="absolute -bottom-1 -right-1 bg-indigo-600 text-white text-[10px] font-black px-1.5 py-0.2 rounded-md border border-slate-900">1</span>
                 </div>
                 <div class="min-w-0">
                     <div class="flex items-center gap-1.5">
-                        <span id="hud-username" class="text-xs sm:text-sm font-black truncate max-w-[115px] sm:max-w-[160px]">داوطلب کنکور</span>
+                        <span id="hud-username" class="text-xs sm:text-sm font-black truncate max-w-[110px] sm:max-w-[160px]">داوطلب کنکور</span>
                         <span id="hud-title-badge" class="hidden sm:inline-block text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-500">نوآموز زیست</span>
                     </div>
                     <!-- XP Progress Bar -->
@@ -113,16 +117,16 @@
             </div>
 
             <!-- Streak, Bio-Coins & Controls -->
-            <div class="flex items-center gap-1.5 sm:gap-2">
-                <div title="زنجیره مطالعه روزانه" class="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-black">
+            <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <div title="زنجیره مطالعه روزانه" class="flex items-center gap-1 px-2 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-500 text-xs font-black">
                     <span>🔥</span>
                     <span id="hud-streak">1</span>
                 </div>
-                <div onclick="switchTab('shop')" title="زیست‌سکه (فروشگاه)" class="cursor-pointer flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-500 text-xs font-black hover:bg-emerald-500/20 transition">
+                <div onclick="switchTab('shop')" title="زیست‌سکه (فروشگاه)" class="cursor-pointer flex items-center gap-1 px-2 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 text-emerald-500 text-xs font-black hover:bg-emerald-500/20 transition">
                     <span>🧬</span>
-                    <span id="hud-coins">15</span>
+                    <span id="hud-coins">25</span>
                 </div>
-                <button onclick="openAdminPanel()" id="btn-admin-hud" title="پنل مدیریت ادمین" class="hidden px-2.5 py-1.5 rounded-xl bg-rose-600/20 border border-rose-500/40 text-rose-400 text-xs font-black hover:bg-rose-600 hover:text-white transition">🛡️ ادمین</button>
+                <button onclick="openAdminPanel()" id="btn-admin-hud" title="پنل مدیریت ادمین" class="hidden px-2.5 py-1.5 rounded-xl bg-rose-600/20 border border-rose-500/40 text-rose-400 text-xs font-black hover:bg-rose-600 hover:text-white transition">🛡️</button>
                 <button onclick="toggleSound()" id="btn-sound" title="صدا" class="p-2 rounded-xl bg-slate-200/70 dark:bg-slate-800/80 text-xs hover:opacity-80 transition">🔊</button>
                 <button onclick="toggleTheme()" id="btn-theme" title="تغییر تم" class="p-2 rounded-xl bg-slate-200/70 dark:bg-slate-800/80 text-xs hover:opacity-80 transition">☀️</button>
             </div>
@@ -135,8 +139,8 @@
     <!-- MAIN CONTENT CONTAINER -->
     <main class="max-w-3xl mx-auto px-3 sm:px-4 pt-4">
 
-        <!-- TAB 1: CHAPTER MAP -->
-        <section id="tab-map" class="space-y-5 animate-pop">
+        <!-- TAB 1: CHAPTER MAP & DAILY QUESTS -->
+        <section id="tab-map" class="space-y-4 animate-pop">
             <div class="relative overflow-hidden rounded-3xl bg-gradient-to-l from-emerald-600 via-teal-700 to-indigo-800 p-5 text-white shadow-lg">
                 <div class="relative z-10 flex items-center justify-between gap-4">
                     <div class="space-y-1.5">
@@ -159,45 +163,88 @@
                 </div>
             </div>
 
+            <!-- DAILY QUESTS WIDGET -->
+            <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3 border border-amber-500/25">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="text-lg">🎯</span>
+                        <h2 class="text-sm font-black text-amber-400">مأموریت‌های روزانه امروز</h2>
+                    </div>
+                    <span id="daily-quests-summary" class="text-[11px] font-black px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-300">0/3 تکمیل</span>
+                </div>
+                <div id="daily-quests-list" class="grid grid-cols-1 sm:grid-cols-3 gap-2.5"></div>
+            </div>
+
             <div id="chapters-path-container" class="relative space-y-4 pb-6"></div>
         </section>
 
-        <!-- TAB 2: ARENA MODE -->
+        <!-- TAB 2: ARENA MODE & LIVE CHAT -->
         <section id="tab-arena" class="hidden space-y-5 animate-pop">
             <div class="glass-card rounded-3xl p-5 space-y-2 border-indigo-500/20">
-                <h2 class="text-xl font-black flex items-center gap-2 text-indigo-400">
-                    <span>⚔️</span>
-                    <span>میدان نبرد زیست‌شناسی (آرنا)</span>
-                </h2>
-                <p class="text-xs text-slate-500 dark:text-slate-400">مهارت تست‌زنی خود را در نبردهای سرعتی و بقا محک بزنید و جایزه ویژه بگیرید.</p>
+                <div class="flex items-center justify-between gap-2">
+                    <h2 class="text-xl font-black flex items-center gap-2 text-indigo-400">
+                        <span>⚔️</span>
+                        <span>میدان نبرد آنلاین زیست‌شناسی (آرنا)</span>
+                    </h2>
+                    <span id="arena-online-pill" class="px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-black">🟢 متصل به سرور</span>
+                </div>
+                <p class="text-xs text-slate-500 dark:text-slate-400">دوستانت را به دوئل آنلاین دعوت کن، همزمان مسابقه بده و در چت آرنا با بقیه داوطلبان گفتگو کن!</p>
             </div>
 
-            <div id="arena-menu" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div onclick="openDuelOpponentPicker()" class="cursor-pointer glass-card rounded-3xl p-5 hover:border-indigo-500 transition-all group flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="w-12 h-12 rounded-2xl bg-indigo-500/15 text-2xl flex items-center justify-center group-hover:scale-110 transition">⚡</div>
-                        <h3 class="text-base font-black">دوئل سریع ۱ به ۱</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">رقابت ۵ سواله سرعتی با حریف! پیروزی = +160 XP و +20 🧬</p>
+            <div id="arena-menu" class="space-y-5">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div onclick="openDuelOpponentPicker()" class="cursor-pointer glass-card rounded-3xl p-5 border border-indigo-500/30 hover:border-indigo-400 duel-glow transition-all group flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between">
+                                <div class="w-12 h-12 rounded-2xl bg-indigo-500/20 text-2xl flex items-center justify-center group-hover:scale-110 transition">⚡</div>
+                                <span class="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-black">آنلاین همزمان 🔴</span>
+                            </div>
+                            <h3 class="text-base font-black">دوئل آنلاین ۱ به ۱</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">ارسال دعوت‌نامه آنلاین به حریف! رقابت همزمان ۵ سواله • پیروزی = +160 XP و +20 🧬</p>
+                        </div>
+                        <span class="text-xs font-black text-indigo-400">انتخاب حریف و ارسال دعوت ←</span>
                     </div>
-                    <span class="text-xs font-black text-indigo-400">شروع دوئل ←</span>
+
+                    <div onclick="startArenaMode('survival')" class="cursor-pointer glass-card rounded-3xl p-5 hover:border-rose-500 transition-all group flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-2xl flex items-center justify-center group-hover:scale-110 transition">❤️‍🔥</div>
+                            <h3 class="text-base font-black">چالش بقا (Survival)</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">با ۳ جان وارد شو و به سوالات ترکیبی ۹ فصل پاسخ بده!</p>
+                        </div>
+                        <span class="text-xs font-black text-rose-400">ورود به بقا ←</span>
+                    </div>
+
+                    <div onclick="startArenaMode('konkoor')" class="cursor-pointer glass-card rounded-3xl p-5 hover:border-emerald-500 transition-all group flex flex-col justify-between space-y-4">
+                        <div class="space-y-2">
+                            <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-2xl flex items-center justify-center group-hover:scale-110 transition">🎓</div>
+                            <h3 class="text-base font-black">آزمون جامع کنکور</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">۹ سوال استاندارد از تمام فصول همراه با کارنامه و پاسخ تشریحی.</p>
+                        </div>
+                        <span class="text-xs font-black text-emerald-400">شروع آزمون ←</span>
+                    </div>
                 </div>
 
-                <div onclick="startArenaMode('survival')" class="cursor-pointer glass-card rounded-3xl p-5 hover:border-rose-500 transition-all group flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="w-12 h-12 rounded-2xl bg-rose-500/15 text-2xl flex items-center justify-center group-hover:scale-110 transition">❤️‍🔥</div>
-                        <h3 class="text-base font-black">چالش بقا (Survival)</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">با ۳ جان وارد شو و به سوالات ترکیبی ۹ فصل پاسخ بده!</p>
+                <!-- LIVE ARENA CHAT BOX -->
+                <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-3 border border-slate-800">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-black flex items-center gap-2 text-emerald-400">
+                            <span>💬</span>
+                            <span>چت و کری‌خوانی زنده داوطلبان</span>
+                        </h3>
+                        <span class="text-[10px] text-slate-400">پیام‌های اخیر آرنا</span>
                     </div>
-                    <span class="text-xs font-black text-rose-400">ورود به بقا ←</span>
-                </div>
-
-                <div onclick="startArenaMode('konkoor')" class="cursor-pointer glass-card rounded-3xl p-5 hover:border-emerald-500 transition-all group flex flex-col justify-between space-y-4">
-                    <div class="space-y-2">
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/15 text-2xl flex items-center justify-center group-hover:scale-110 transition">🎓</div>
-                        <h3 class="text-base font-black">آزمون جامع کنکور</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">۹ سوال استاندارد از تمام فصول همراه با کارنامه و پاسخ تشریحی.</p>
+                    <div id="arena-chat-messages" class="h-44 overflow-y-auto custom-scrollbar space-y-2 p-2.5 rounded-2xl bg-slate-900/80 border border-slate-800/80">
+                        <div class="text-center text-xs text-slate-500 py-12">در حال بارگذاری گفتگوها...</div>
                     </div>
-                    <span class="text-xs font-black text-emerald-400">شروع آزمون ←</span>
+                    <div class="flex flex-wrap gap-1.5">
+                        <button type="button" onclick="sendQuickArenaChat('کی پایه دوئل آنلاین زیسته؟ ⚔️🔥')" class="px-2.5 py-1 rounded-xl bg-indigo-500/15 hover:bg-indigo-500/25 text-indigo-300 text-[11px] font-bold transition">کی پایه دوئله؟ ⚔️</button>
+                        <button type="button" onclick="sendQuickArenaChat('فصل اعصاب و حواس رو فول شدم! 🧠💪')" class="px-2.5 py-1 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 text-[11px] font-bold transition">اعصاب رو فول شدم 🧠</button>
+                        <button type="button" onclick="sendQuickArenaChat('بیایید رقابت کنیم ببینیم کی اول میشه 🏆')" class="px-2.5 py-1 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-300 text-[11px] font-bold transition">رقابت لیدربورد 🏆</button>
+                    </div>
+                    <form onsubmit="handleArenaChatSubmit(event)" class="flex gap-2">
+                        <input id="arena-chat-input" type="text" maxlength="140" placeholder="پیام یا دعوت به چالش بنویس..." class="flex-1 px-3.5 py-2.5 rounded-2xl bg-slate-900 border border-slate-700 text-white text-xs font-bold focus:outline-none focus:border-emerald-500" />
+                        <button type="submit" class="px-4 py-2.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shrink-0 transition">ارسال</button>
+                    </form>
                 </div>
             </div>
 
@@ -213,7 +260,7 @@
                             <span>🏆</span>
                             <span>جدول رده‌بندی داوطلبان فعال</span>
                         </h2>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">تنها داوطلبانی که وارد برنامه شده و ثبت‌نام کرده‌اند در جدول رده‌بندی نمایش داده می‌شوند.</p>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">داوطلبان فعال در جدول رده‌بندی نمایش داده می‌شوند؛ برای رقابت مستقیم به تب آرنا بروید.</p>
                     </div>
                     <span id="user-league-badge" class="px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-400 text-xs font-black">
                         لیگ فعلی: برنز 🥉
@@ -240,7 +287,7 @@
                 </div>
                 <div class="px-4 py-2 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-black text-sm flex items-center gap-1.5">
                     <span>🧬</span>
-                    <span id="shop-coins-display">15</span>
+                    <span id="shop-coins-display">25</span>
                 </div>
             </div>
 
@@ -330,6 +377,30 @@
         </section>
     </main>
 
+    <!-- INCOMING ONLINE DUEL INVITE POPUP -->
+    <div id="incoming-duel-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="glass-card max-w-sm w-full rounded-3xl p-6 text-center space-y-4 border-2 border-indigo-500 duel-glow animate-pop">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-indigo-600/25 border border-indigo-400/40 flex items-center justify-center text-4xl animate-float">
+                ⚔️
+            </div>
+            <span class="inline-block px-3 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-black">
+                دعوت به دوئل آنلاین همزمان!
+            </span>
+            <h3 id="incoming-duel-title" class="text-lg font-black text-white">حریف شما را به نبرد دعوت کرد!</h3>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                ۵ سوال سرعتی زیست‌شناسی یازدهم • هر سوال ۳۰ ثانیه فرصت دارید. برنده +160 XP و +20 🧬 می‌گیرد!
+            </p>
+            <div class="grid grid-cols-2 gap-3 pt-2">
+                <button onclick="declineIncomingDuel()" class="py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-black transition">
+                    ❌ رد کردن
+                </button>
+                <button onclick="acceptIncomingDuel()" class="py-3 rounded-2xl bg-gradient-to-l from-emerald-600 to-indigo-600 hover:opacity-95 text-white text-xs font-black shadow-lg transition">
+                    ⚡ قبول و شروع!
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- REGISTRATION ONBOARDING MODAL -->
     <div id="registration-modal" class="fixed inset-0 z-50 hidden bg-[#070b14]/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="glass-card max-w-md w-full rounded-3xl p-6 sm:p-7 space-y-5 border border-emerald-500/30 shadow-2xl animate-pop">
@@ -383,7 +454,7 @@
                 </div>
                 <div class="flex items-center gap-1 text-xs font-black text-emerald-400 bg-emerald-500/10 px-2.5 py-1.5 rounded-xl">
                     <span>🧬</span>
-                    <span id="modal-coins-sync">15</span>
+                    <span id="modal-coins-sync">25</span>
                 </div>
             </div>
 
@@ -459,12 +530,12 @@
                 <div id="admin-users-list" class="space-y-3"></div>
             </div>
 
-            <!-- ADMIN TAB 2: SEPARATE QUESTIONS MANAGER (QUIZ / BOSS / DUEL / SURVIVAL / KONKOOR) -->
+            <!-- ADMIN TAB 2: SEPARATE QUESTIONS MANAGER -->
             <div id="adm-body-questions" class="hidden space-y-4">
                 <div class="glass-card rounded-3xl p-4 sm:p-5 space-y-4 border border-indigo-500/25">
                     <div>
                         <h3 class="text-sm sm:text-base font-black text-indigo-400">➕ افزودن سوال جدید به بخش دلخواه (کاملاً مجزا)</h3>
-                        <p class="text-[11px] text-slate-400 mt-0.5">سوالات هر بخش به صورت مستقل ذخیره و اجرا می‌شوند.</p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">سوالات هر بخش به صورت مستقل ذخیره و در فضای ابری همگام می‌شوند.</p>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -487,6 +558,23 @@
                     <div>
                         <label class="block text-[11px] font-black text-slate-300 mb-1">صورت سوال تستی:</label>
                         <textarea id="adm-q-text" rows="2" placeholder="متن سوال زیست‌شناسی یازدهم را وارد کنید..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-bold"></textarea>
+                    </div>
+
+                    <div class="p-3 rounded-2xl bg-slate-900/70 border border-indigo-500/25 space-y-2">
+                        <div class="flex flex-wrap items-center justify-between gap-2">
+                            <label class="text-[11px] font-black text-indigo-300">🖼️ تصویر سوال (اختیاری - ویژه سوالات تصویری و شکل‌های کتاب):</label>
+                            <label class="cursor-pointer px-3 py-1 rounded-xl bg-indigo-600/25 hover:bg-indigo-600 text-indigo-300 hover:text-white border border-indigo-500/40 text-[11px] font-black transition">
+                                📁 انتخاب عکس از گالری
+                                <input id="adm-q-img-file" type="file" accept="image/*" onchange="handleAdminQuestionImageFile(event)" class="hidden" />
+                            </label>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input id="adm-q-img" type="text" dir="ltr" oninput="updateAdminQuestionImagePreview()" placeholder="لینک مستقیم تصویر (https://...) یا انتخاب عکس از گالری" class="flex-1 px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-bold focus:outline-none focus:border-indigo-500" />
+                            <button type="button" onclick="clearAdminQuestionImage()" class="px-2.5 py-2 rounded-xl bg-slate-800 hover:bg-rose-600/30 text-slate-300 hover:text-rose-300 text-[11px] font-black transition">پاک کردن</button>
+                        </div>
+                        <div id="adm-q-img-preview-wrap" class="hidden pt-1">
+                            <img id="adm-q-img-preview" src="" alt="پیش‌نمایش تصویر سوال" class="max-h-40 rounded-xl border border-slate-700 object-contain bg-slate-950 mx-auto" />
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -513,7 +601,7 @@
                     </div>
 
                     <button onclick="adminAddQuestion()" class="w-full py-3 rounded-2xl bg-gradient-to-l from-indigo-600 to-emerald-600 hover:opacity-95 text-white text-xs font-black shadow-lg transition">
-                        ✅ ثبت سوال در بخش انتخاب‌شده
+                        ✅ ثبت سوال و ذخیره ابری
                     </button>
                 </div>
 
@@ -541,7 +629,7 @@
                     </div>
                     <textarea id="adm-n-text" rows="2" placeholder="متن نکته درسنامه یا دام تستی را بنویسید..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-bold"></textarea>
                     <button onclick="adminAddNote()" class="w-full py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black shadow transition">
-                        ➕ افزودن به درسنامه گفتار
+                        ➕ افزودن به درسنامه و ذخیره ابری
                     </button>
                 </div>
                 <div id="admin-notes-list" class="space-y-2.5"></div>
@@ -555,7 +643,7 @@
                     <input id="adm-fc-front" type="text" placeholder="روی کارت (سوال یا واژه کلیدی)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-bold" />
                     <textarea id="adm-fc-back" rows="2" placeholder="پشت کارت (پاسخ کوتاه و کنکوری)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-bold"></textarea>
                     <button onclick="adminAddFlashcard()" class="w-full py-3 rounded-2xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-black shadow transition">
-                        ➕ افزودن فلش‌کارت
+                        ➕ افزودن فلش‌کارت و ذخیره ابری
                     </button>
                 </div>
                 <div id="admin-flashcards-list" class="space-y-2.5"></div>
@@ -563,8 +651,16 @@
         </div>
     </div>
 
+        <!-- IMAGE ZOOM LIGHTBOX MODAL -->
+    <div id="image-zoom-modal" onclick="closeImageZoom()" class="fixed inset-0 z-50 hidden bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4">
+        <div class="max-w-3xl w-full flex justify-end mb-2">
+            <button type="button" onclick="closeImageZoom()" class="px-3.5 py-1.5 rounded-xl bg-slate-800 text-white text-xs font-black">✕ بستن تصویر</button>
+        </div>
+        <img id="image-zoom-target" src="" alt="بزرگ‌نمایی تصویر سوال" onclick="event.stopPropagation()" class="max-w-full max-h-[80vh] object-contain rounded-2xl border border-slate-700 shadow-2xl bg-slate-900" />
+    </div>
+
     <!-- GENERIC DIALOG MODAL -->
-    <div id="dialog-modal" class="fixed inset-0 z-50 hidden bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+    <div id="dialog-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="glass-card max-w-sm w-full rounded-3xl p-6 space-y-4 animate-pop">
             <h3 id="dialog-title" class="text-base font-black">عنوان</h3>
             <div id="dialog-content" class="text-xs text-slate-400 leading-relaxed"></div>
@@ -573,7 +669,7 @@
     </div>
 
     <!-- FIXED BOTTOM NAVIGATION BAR -->
-    <nav class="fixed bottom-0 inset-x-0 z-40 glass-card border-t border-slate-200/80 dark:border-slate-800/90 px-2 py-1.5 shadow-2xl">
+    <nav class="fixed bottom-0 inset-x-0 z-40 glass-card border-t border-slate-200/80 dark:border-slate-800/90 px-2 pt-1.5 pb-[calc(0.45rem+env(safe-area-inset-bottom))] shadow-2xl">
         <div class="max-w-3xl mx-auto grid grid-cols-5 gap-1">
             <button onclick="switchTab('map')" id="nav-btn-map" class="flex flex-col items-center justify-center py-1.5 rounded-2xl text-emerald-400 bg-emerald-500/10 transition">
                 <span class="text-lg">🗺️</span>
@@ -600,13 +696,17 @@
 
     <script>
         // =====================================================================
-        // 0. CLOUD BACKEND (SUPABASE) & TELEGRAM MINI APP SDK
+        // 0. CLOUD BACKEND (SUPABASE), REALTIME DUELS, LIVE CHAT & TELEGRAM SDK
         // =====================================================================
-        const SUPABASE_URL = "https://xrctosqtfudjjtzamoie.supabase.co";
-        const SUPABASE_ANON_KEY = "sb_publishable_LqIXk_atrURmwsarq-6MwQ_QlHTZYHS";
+        const SUPABASE_URL = "https://dyyccpxykvylxllffhmm.supabase.co";
+        const SUPABASE_ANON_KEY = "sb_publishable_cnAuuEKyREfM-uTybo8LPw_EcALdcC5";
 
         let supabaseClient = null;
         let cloudLeaderboardUsers = [];
+        let incomingDuelInvite = null;
+        let activeOnlineDuel = null;
+        let duelSyncInterval = null;
+        let ignoredDuelIds = new Set();
 
         async function fetchCloudLeaderboard() {
             if (!supabaseClient) return;
@@ -638,12 +738,335 @@
             }
         }
 
+        async function fetchCloudAdminContent() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from("admin_sync_data")
+                    .select("payload")
+                    .eq("id", "main_store")
+                    .maybeSingle();
+                if (!error && data && data.payload && typeof data.payload === "object" && Object.keys(data.payload).length > 0) {
+                    applyCustomContentPayload(data.payload);
+                    localStorage.setItem(CUSTOM_CONTENT_KEY, JSON.stringify(data.payload));
+                    if (!document.getElementById("admin-modal").classList.contains("hidden")) {
+                        if (currentAdminTab === "questions") renderAdminQuestionsList();
+                        if (currentAdminTab === "notes") renderAdminNotesList();
+                        if (currentAdminTab === "flashcards") renderAdminFlashcardsList();
+                    }
+                }
+            } catch (e) {}
+        }
+
+        async function pushCloudAdminContent(payload) {
+            if (!supabaseClient) return;
+            if (!isAuthorizedTelegramAdmin() && !adminSessionUnlocked) return;
+            try {
+                await supabaseClient
+                    .from("admin_sync_data")
+                    .upsert({
+                        id: "main_store",
+                        payload: payload,
+                        updated_by: state.userId || "admin",
+                        updated_at: new Date().toISOString()
+                    }, { onConflict: "id" });
+            } catch (e) {}
+        }
+
+        // --- REALTIME ONLINE DUELS POLLING & SYNC ---
+        async function pollOnlineDuels() {
+            if (!supabaseClient || !state.isRegistered) return;
+            try {
+                // 1. Check incoming pending invites for this user (last 3 minutes)
+                if (!activeOnlineDuel && !incomingDuelInvite) {
+                    const cutoff = Date.now() - 180000;
+                    const { data: invites } = await supabaseClient
+                        .from("biosolo11_duels")
+                        .select("*")
+                        .eq("opponent_id", state.userId)
+                        .eq("status", "pending")
+                        .gte("created_at", cutoff)
+                        .order("created_at", { ascending: false })
+                        .limit(1);
+
+                    if (Array.isArray(invites) && invites.length > 0) {
+                        const inv = invites[0];
+                        if (!ignoredDuelIds.has(inv.id)) {
+                            incomingDuelInvite = inv;
+                            showIncomingDuelModal(inv);
+                        }
+                    }
+                }
+
+                // 2. If currently in an online duel, fetch live opponent progress/status
+                if (activeOnlineDuel && activeOnlineDuel.id) {
+                    const { data: duelRow } = await supabaseClient
+                        .from("biosolo11_duels")
+                        .select("*")
+                        .eq("id", activeOnlineDuel.id)
+                        .maybeSingle();
+
+                    if (duelRow) {
+                        handleLiveDuelStateUpdate(duelRow);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function showIncomingDuelModal(inv) {
+            playSound("invite");
+            const titleEl = document.getElementById("incoming-duel-title");
+            if (titleEl) {
+                titleEl.textContent = `${inv.challenger_avatar || "🧬"} ${inv.challenger_name || "یک داوطلب"} شما را به دوئل آنلاین دعوت کرد!`;
+            }
+            document.getElementById("incoming-duel-modal").classList.remove("hidden");
+        }
+
+        async function declineIncomingDuel() {
+            playSound("click");
+            document.getElementById("incoming-duel-modal").classList.add("hidden");
+            if (incomingDuelInvite && supabaseClient) {
+                ignoredDuelIds.add(incomingDuelInvite.id);
+                try {
+                    await supabaseClient
+                        .from("biosolo11_duels")
+                        .update({ status: "declined", updated_at: Date.now() })
+                        .eq("id", incomingDuelInvite.id);
+                } catch (e) {}
+            }
+            incomingDuelInvite = null;
+        }
+
+        async function acceptIncomingDuel() {
+            if (!incomingDuelInvite) return;
+            playSound("win");
+            const inv = incomingDuelInvite;
+            incomingDuelInvite = null;
+            document.getElementById("incoming-duel-modal").classList.add("hidden");
+
+            if (supabaseClient) {
+                try {
+                    await supabaseClient
+                        .from("biosolo11_duels")
+                        .update({ status: "active", updated_at: Date.now() })
+                        .eq("id", inv.id);
+                } catch (e) {}
+            }
+
+            // Close any open modal and jump straight into Arena
+            document.getElementById("chapter-modal").classList.add("hidden");
+            document.getElementById("admin-modal").classList.add("hidden");
+            switchTab("arena");
+
+            const questions = Array.isArray(inv.questions) && inv.questions.length > 0
+                ? inv.questions
+                : getModeSpecificQuestions("duel", 5).slice(0, 5);
+
+            activeOnlineDuel = {
+                id: inv.id,
+                role: "opponent",
+                status: "active",
+                rivalName: inv.challenger_name || "حریف آنلاین",
+                rivalAvatar: inv.challenger_avatar || "🧬",
+                rivalScore: Number(inv.challenger_score) || 0,
+                rivalProgress: Number(inv.challenger_progress) || 0
+            };
+
+            document.getElementById("arena-menu").classList.add("hidden");
+            const gameplay = document.getElementById("arena-gameplay");
+            gameplay.classList.remove("hidden");
+
+            arenaState = {
+                mode: "duel",
+                isOnlineLive: true,
+                duelId: inv.id,
+                role: "opponent",
+                rivalName: activeOnlineDuel.rivalName,
+                rivalAvatar: activeOnlineDuel.rivalAvatar,
+                rivalXp: 0,
+                isRealPlayer: true,
+                questions: questions,
+                idx: 0,
+                myScore: 0,
+                rivalScore: activeOnlineDuel.rivalScore,
+                rivalProgress: activeOnlineDuel.rivalProgress,
+                locked: false
+            };
+            renderArenaGameplay();
+        }
+
+        function handleLiveDuelStateUpdate(row) {
+            if (!activeOnlineDuel || !arenaState || !arenaState.isOnlineLive) return;
+
+            if (row.status === "declined" && activeOnlineDuel.status === "pending") {
+                clearDuelTimer();
+                activeOnlineDuel = null;
+                arenaState = null;
+                playSound("wrong");
+                showToast("حریف دعوت دوئل را رد کرد.", "rose");
+                exitArena();
+                return;
+            }
+
+            const wasPending = activeOnlineDuel.status === "pending";
+            activeOnlineDuel.status = row.status;
+
+            if (activeOnlineDuel.role === "challenger") {
+                arenaState.rivalScore = Number(row.opponent_score) || 0;
+                arenaState.rivalProgress = Number(row.opponent_progress) || 0;
+            } else {
+                arenaState.rivalScore = Number(row.challenger_score) || 0;
+                arenaState.rivalProgress = Number(row.challenger_progress) || 0;
+            }
+
+            if (wasPending && row.status === "active") {
+                playSound("win");
+                showToast(`⚡ ${arenaState.rivalName} دعوت را پذیرفت! مسابقه آغاز شد!`, "emerald");
+                renderArenaGameplay();
+                return;
+            }
+
+            // Update live rival score badge in UI without resetting question timer
+            const rivalScoreEl = document.getElementById("live-rival-score");
+            if (rivalScoreEl) {
+                rivalScoreEl.textContent = `${arenaState.rivalAvatar} ${arenaState.rivalName}: ${arenaState.rivalScore} (${arenaState.rivalProgress}/5)`;
+            }
+
+            // If user already finished and was waiting for opponent, re-render summary screen
+            if (arenaState.idx >= arenaState.questions.length) {
+                renderArenaGameplay();
+            }
+        }
+
+        async function pushLiveDuelProgress() {
+            if (!supabaseClient || !arenaState || !arenaState.isOnlineLive || !arenaState.duelId) return;
+            try {
+                const isChallenger = arenaState.role === "challenger";
+                const patch = isChallenger
+                    ? {
+                        challenger_score: arenaState.myScore,
+                        challenger_progress: arenaState.idx,
+                        updated_at: Date.now()
+                    }
+                    : {
+                        opponent_score: arenaState.myScore,
+                        opponent_progress: arenaState.idx,
+                        updated_at: Date.now()
+                    };
+
+                if (arenaState.idx >= arenaState.questions.length && (arenaState.rivalProgress || 0) >= arenaState.questions.length) {
+                    patch.status = "finished";
+                }
+
+                await supabaseClient
+                    .from("biosolo11_duels")
+                    .update(patch)
+                    .eq("id", arenaState.duelId);
+            } catch (e) {}
+        }
+
+        // --- LIVE ARENA CHAT ---
+        async function fetchArenaChat() {
+            if (!supabaseClient) return;
+            try {
+                const { data, error } = await supabaseClient
+                    .from("biosolo11_chat")
+                    .select("*")
+                    .order("created_at", { ascending: false })
+                    .limit(25);
+                if (!error && Array.isArray(data)) {
+                    renderArenaChatMessages(data.reverse());
+                }
+            } catch (e) {}
+        }
+
+        function renderArenaChatMessages(msgs) {
+            const box = document.getElementById("arena-chat-messages");
+            if (!box) return;
+            if (!msgs || msgs.length === 0) {
+                box.innerHTML = `<div class="text-center text-xs text-slate-500 py-12">هنوز پیامی ثبت نشده؛ اولین نفر باش! 💬</div>`;
+                return;
+            }
+            const wasAtBottom = box.scrollHeight - box.scrollTop <= box.clientHeight + 50;
+            box.innerHTML = msgs.map(m => {
+                const isMe = m.user_id === state.userId;
+                return `
+                    <div class="flex items-start gap-2 ${isMe ? "flex-row-reverse" : ""}">
+                        <span class="text-lg shrink-0">${m.avatar || "🧬"}</span>
+                        <div class="max-w-[78%] px-3 py-1.5 rounded-2xl text-xs ${isMe ? "bg-emerald-600/25 border border-emerald-500/35 text-emerald-100" : "bg-slate-800/90 border border-slate-700/70 text-slate-200"}">
+                            <div class="text-[10px] font-black ${isMe ? "text-emerald-400" : "text-indigo-400"} mb-0.5">${m.username || "داوطلب"}</div>
+                            <div class="leading-relaxed break-words">${escapeHtml(m.message)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+            if (wasAtBottom) {
+                box.scrollTop = box.scrollHeight;
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str || "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+        }
+
+        async function sendArenaChatMessage(text) {
+            const clean = String(text || "").trim();
+            if (!clean || !state.isRegistered) return;
+            playSound("click");
+            if (!supabaseClient) {
+                showToast("اتصال به سرور برقرار نیست.", "rose");
+                return;
+            }
+            try {
+                await supabaseClient.from("biosolo11_chat").insert({
+                    id: `msg_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
+                    user_id: state.userId,
+                    username: state.username,
+                    avatar: state.avatar,
+                    message: clean,
+                    created_at: Date.now()
+                });
+                fetchArenaChat();
+            } catch (e) {}
+        }
+
+        function handleArenaChatSubmit(e) {
+            e.preventDefault();
+            const inp = document.getElementById("arena-chat-input");
+            if (!inp || !inp.value.trim()) return;
+            const txt = inp.value.trim();
+            inp.value = "";
+            sendArenaChatMessage(txt);
+        }
+
+        function sendQuickArenaChat(txt) {
+            sendArenaChatMessage(txt);
+        }
+
         function initCloudBackend() {
             try {
                 if (typeof window.supabase !== "undefined" && SUPABASE_URL && SUPABASE_ANON_KEY) {
                     supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                    fetchCloudAdminContent();
                     fetchCloudLeaderboard();
-                    setInterval(fetchCloudLeaderboard, 15000);
+                    fetchArenaChat();
+                    pollOnlineDuels();
+
+                    // Fast polling for online duels (every 2.5s) and chat/leaderboard (every 8s)
+                    duelSyncInterval = setInterval(() => {
+                        pollOnlineDuels();
+                    }, 2500);
+
+                    setInterval(() => {
+                        fetchCloudAdminContent();
+                        fetchCloudLeaderboard();
+                        if (!document.getElementById("tab-arena").classList.contains("hidden")) {
+                            fetchArenaChat();
+                        }
+                    }, 8000);
                 }
             } catch (e) {
                 console.warn("Supabase init skipped:", e);
@@ -668,9 +1091,7 @@
                         updated_at: Date.now()
                     }, { onConflict: "user_id" });
                 fetchCloudLeaderboard();
-            } catch (e) {
-                console.warn("Supabase sync skipped:", e);
-            }
+            } catch (e) {}
         }
 
         // =====================================================================
@@ -686,7 +1107,7 @@
         ];
 
         // =====================================================================
-        // 2. COMPLETE 9 CHAPTERS DATA (درسنامه + آزمونک + فلش‌کارت + باس‌فایت)
+        // 2. COMPLETE 9 CHAPTERS DATA (درسنامه + نکات ترکیبی + آزمونک + فلش‌کارت)
         // =====================================================================
         const CHAPTERS_DATA = [
             {
@@ -701,10 +1122,10 @@
                         id: "1-1",
                         title: "گفتار ۱: یاخته‌های بافت عصبی",
                         notes: [
-                            { type: "concept", text: "بافت عصبی از دو نوع یاخته تشکیل شده است: ۱) نورون‌ها (یاخته‌های عصبی اصلی که تحریک‌پذیرند و پیام عصبی را تولید و هدایت می‌کنند) و ۲) یاخته‌های پشتیبان یا نوروگلیا (فاقد توانایی تولید پیام عصبی‌اند و نقش تغذیه، حفاظت، ساخت غلاف میلین و حفظ هم‌ایستایی مایع اطراف نورون‌ها را بر عهده دارند)." },
-                            { type: "tip", text: "نورون از سه بخش اصلی دندریت (دریافت پیام و هدایت به سمت جسم یاخته‌ای)، جسم یاخته‌ای (دارای هسته و اندامک‌ها) و آکسون (هدایت پیام از جسم یاخته‌ای تا پایانه آکسون) ساخته شده است. غلاف میلین در دستگاه عصبی محیطی توسط یاخته‌های شوان و در دستگاه عصبی مرکزی توسط نوعی نوروگلیا ساخته می‌شود." },
+                            { type: "concept", text: "بافت عصبی از دو نوع یاخته تشکیل شده است: ۱) نورون‌ها (تحریک‌پذیر و تولیدکننده پیام عصبی) و ۲) یاخته‌های پشتیبان یا نوروگلیا (فاقد توانایی تولید پیام عصبی‌اند و نقش تغذیه، حفاظت، ساخت غلاف میلین و حفظ هم‌ایستایی مایع اطراف نورون‌ها را بر عهده دارند)." },
+                            { type: "tip", text: "نکته ترکیبی: در نورون حسی (دوقطبی/تک‌قطبی کاذب) هم دندریت بلند و هم آکسون غلاف میلین دارند، اما در نورون حرکتی و رابط دندریت‌ها کوتاه و فاقد میلین‌اند و فقط آکسون می‌تواند میلین‌دار باشد." },
                             { type: "concept", text: "پتانسیل آرامش (-۷۰ میلی‌ولت): به دلیل نفوذپذیری بیشتر غشا به یون پتاسیم نسبت به سدیم (کانال‌های نشتی پتاسیمی بیشترند) و وجود پروتئین‌های بزرگ بار منفی درون یاخته است. پمپ سدیم-پتاسیم با مصرف ATP، همزمان ۳ یون سدیم به خارج و ۲ یون پتاسیم به داخل پمپ می‌کند." },
-                            { type: "trap", text: "دام تستی: در پایان پتانسیل عمل، بازگشت غلظت یون‌های سدیم و پتاسیم به حالت آرامش نتیجه فعالیت عادی پمپ سدیم-پتاسیم است (نه افزایش فعالیت پمپ!). همچنین در هدایت جهشی در رشته‌های میلین‌دار، جریان یونی فقط در گره‌های رانویه رخ می‌دهد." }
+                            { type: "trap", text: "دام تستی: در پایان پتانسیل عمل، بازگشت غلظت یون‌های سدیم و پتاسیم به حالت آرامش نتیجه فعالیت عادی پمپ سدیم-پتاسیم است (نه افزایش فعالیت پمپ!). همچنین در هدایت جهشی، جریان یونی فقط در گره‌های رانویه رخ می‌دهد." }
                         ]
                     },
                     {
@@ -712,7 +1133,7 @@
                         title: "گفتار ۲: ساختار دستگاه عصبی",
                         notes: [
                             { type: "concept", text: "دستگاه عصبی شامل بخش مرکزی (مغز و نخاع) و بخش محیطی (۱۲ جفت عصب مغزی و ۳۱ جفت عصب نخاعی) است. مغز شامل مخ، مخچه و ساقه مغز (مغز میانی، پل مغزی و بصل‌النخاع) است." },
-                            { type: "tip", text: "مخ دارای چهار لوب پیشانی، آهیانه، گیجگاهی و پس‌سری است. لوب گیجگاهی در نمای فوقانی مغز دیده نمی‌شود و با سه لوب دیگر مرز مشترک دارد. رابط پینه‌ای و رابط سه‌گوش دو نیمکره مخ را به هم متصل می‌کنند." },
+                            { type: "tip", text: "نکته ترکیبی: مخ دارای چهار لوب پیشانی، آهیانه، گیجگاهی و پس‌سری است. لوب گیجگاهی در نمای فوقانی مغز دیده نمی‌شود و با سه لوب دیگر مرز مشترک دارد. رابط پینه‌ای و رابط سه‌گوش دو نیمکره مخ را به هم متصل می‌کنند." },
                             { type: "concept", text: "تالاموس مرکز تقویت و پردازش اولیه اطلاعات حسی (به جز بویایی) است. هیپوتالاموس مرکز تنظیم دمای بدن، گرسنگی، تشنگی، خواب و بیداری و تنظیم ترشح هیپوفیز است. بصل‌النخاع مرکز اصلی تنفس، ضربان قلب و فشار خون است." },
                             { type: "trap", text: "دام تستی: در انعکاس عقب کشیدن دست در برخورد با جسم داغ، نورون حسی با دو نورون رابط در ماده خاکستری نخاع سیناپس می‌دهد: نورون رابط اول با نورون حرکتی ماهیچه دوسر بازو سیناپس تحریکی و نورون رابط دوم با نورون حرکتی ماهیچه سه‌سر بازو سیناپس مهاری برقرار می‌کند." },
                             { type: "concept", text: "در جانوران: هیدر ساده‌ترین دستگاه عصبی را به شکل شبکه عصبی دارد و فاقد مغز است. در پلاناریا دستگاه عصبی مرکزی شامل مغز و دو طناب عصبی جانبی فاقد جسم یاخته‌ای است. در حشرات (مثل ملخ) مغز در سر و طناب عصبی شکمی گره‌دار وجود دارد." }
@@ -723,224 +1144,14 @@
                     { q: "در پایان پتانسیل عمل، بازگشت غلظت یون‌های سدیم و پتاسیم به حالت آرامش نتیجه مستقیم چیست؟", options: ["باز شدن کانال‌های دریچه‌دار پتاسیمی", "افزایش فعالیت پمپ سدیم-پتاسیم", "فعالیت عادی پمپ سدیم-پتاسیم", "بسته شدن کانال‌های نشتی"], answer: 2, exp: "در پایان پتانسیل عمل، فعالیت عادی پمپ سدیم-پتاسیم یون‌ها را به وضعیت اولیه بازمی‌گرداند." },
                     { q: "کدام لوب مخ در نمای فوقانی مغز دیده نمی‌شود و با سه لوب دیگر مرز مشترک دارد؟", options: ["پیشانی", "پس‌سری", "آهیانه", "گیجگاهی"], answer: 3, exp: "لوب گیجگاهی در نمای فوقانی مغز دیده نمی‌شود و با لوب‌های پیشانی، آهیانه و پس‌سری مرز مشترک دارد." },
                     { q: "در انعکاس عقب کشیدن دست، سیناپس بین نورون رابط و نورون حرکتی ماهیچه سه‌سر بازو چگونه است؟", options: ["فعال و تحریکی", "فعال و مهاری", "غیرفعال", "الکتریکی"], answer: 1, exp: "نورون رابط دوم با نورون حرکتی ماهیچه سه‌سر بازو سیناپس فعال و مهاری برقرار می‌کند." },
-                    { q: "در کدام جانور طناب‌های عصبی فاقد جسم یاخته‌ای هستند؟", options: ["پلاناریا", "ملخ", "قورباغه", "کبوتر"], answer: 0, exp: "در پلاناریا جسم‌های یاخته‌ای در دو گره عصبی سر متمرکز شده‌اند و طناب‌های عصبی فاقد جسم یاخته‌ای هستند." }
+                    { q: "در کدام جانور طناب‌های عصبی فاقد جسم یاخته‌ای هستند؟", options: ["پلاناریا", "ملخ", "قورباغه", "کبوتر"], answer: 0, exp: "در پلاناریا جسم‌های یاخته‌ای در دو گره عصبی سر متمرکز شده‌اند و طناب‌های عصبی فاقد جسم یاخته‌ای هستند." },
+                    { q: "کدام ساختار در ساقه مغز قرار داشته و همراه با بصل‌النخاع مرکز تنظیم تنفس محسوب می‌شود؟", options: ["تالاموس", "پل مغزی", "هیپوتالاموس", "مخچه"], answer: 1, exp: "پل مغزی در ساقه مغز قرار دارد و با اثر بر مرکز تنفس در بصل‌النخاع، دم و بازدم را تنظیم می‌کند." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-1-1",
-                        "front": "تفاوت محل غلاف میلین در نورون حسی و حرکتی چیست؟",
-                        "back": "نورون حسی: دندریت و آکسون میلین‌دار | نورون حرکتی: فقط آکسون میلین‌دار است."
-                    },
-                    {
-                        "id": "fc-1-2",
-                        "front": "نسبت جابه‌جایی یون‌ها توسط پمپ سدیم-پتاسیم چگونه است؟",
-                        "back": "با مصرف ATP، همزمان ۳ یون سدیم (+Na) را به خارج و ۲ یون پتاسیم (+K) را به داخل یاخته منتقل می‌کند."
-                    },
-                    {
-                        "id": "fc-1-3",
-                        "front": "مقایسه دستگاه عصبی هیدر، پلاناریا و حشرات",
-                        "back": "هیدر: شبکه عصبی بدون مغز | پلاناریا: مغز + دو طناب عصبی جانبی بدون جسم سلولی | حشرات: مغز + یک طناب عصبی شکمی گره‌دار."
-                    },
-                    {
-                        "id": "fc-1-4",
-                        "front": "پتانسیل آرامش چقدر است و چگونه حفظ می‌شود؟",
-                        "back": "حدود ۷۰- میلی‌ولت. پمپ سدیم‌پتاسیم با مصرف ATP در هر دور ۳ یون Na⁺ را خارج و ۲ یون K⁺ را وارد می‌کند."
-                    },
-                    {
-                        "id": "fc-1-5",
-                        "front": "غلاف میلین چه کاری می‌کند و چه یاخته‌هایی آن را می‌سازند؟",
-                        "back": "عایق‌بندی و هدایت جهشی در گره‌های رانویه. شوان در اعصاب محیطی و الیگودندروسیت در مغز و نخاع."
-                    },
-                    {
-                        "id": "fc-1-6",
-                        "front": "سه بخش اصلی نورون؟",
-                        "back": "دندریت (دریافت پیام)، جسم یاخته‌ای و آکسون (ارسال پیام)."
-                    },
-                    {
-                        "id": "fc-1-7",
-                        "front": "مخچه و بصل‌النخاع چه نقشی دارند؟",
-                        "back": "مخچه: تعادل و هماهنگی حرکات. بصل‌النخاع: تنفس، ضربان قلب، فشار خون، بلع، عطسه و سرفه."
-                    },
-                    {
-                        "id": "fc-1-8",
-                        "front": "هیپوتالاموس چه می‌کند؟",
-                        "back": "تنظیم دمای بدن، تشنگی، گرسنگی و خواب؛ ارتباط دستگاه عصبی با غدد درون‌ریز."
-                    },
-                    {
-                        "id": "fc-1-9",
-                        "front": "بخش‌های دستگاه عصبی محیطی حرکتی؟",
-                        "back": "پیکری (ارادی، ماهیچه‌های اسکلتی) و خودمختار (غیرارادی) شامل هم‌حس و پادهم‌حس."
-                    },
-                    {
-                        "id": "fc-1-10",
-                        "front": "مراحل پتانسیل عمل؟",
-                        "back": "با تحریک، کانال‌های Na⁺ دریچه‌دار باز می‌شوند و Na⁺ وارد می‌شود (قطبش‌زدایی)؛ سپس کانال‌های K⁺ باز و K⁺ خارج می‌شود (بازقطبش)."
-                    },
-                    {
-                        "id": "fc-1-11",
-                        "front": "سیناپس چیست؟",
-                        "back": "محل ارتباط دو نورون؛ ناقل عصبی از پایانهٔ آکسون با برون‌رانی آزاد و به گیرندهٔ نورون بعدی متصل می‌شود."
-                    },
-                    {
-                        "id": "fc-1-12",
-                        "front": "ساقهٔ مغز شامل چه بخش‌هایی است؟",
-                        "back": "مغز میانی، پل مغزی و بصل‌النخاع."
-                    },
-                    {
-                        "id": "fc-1-13",
-                        "front": "تالاموس چه می‌کند؟",
-                        "back": "مرکز تقویت و پخش بیشتر پیام‌های حسی به قشر مخ."
-                    },
-                    {
-                        "id": "fc-1-14",
-                        "front": "ماده خاکستری و سفید در مغز و نخاع؟",
-                        "back": "مغز: خاکستری در سطح، سفید در عمق. نخاع: خاکستری در مرکز (پروانه‌ای)، سفید در اطراف."
-                    },
-                    {
-                        "id": "fc-1-15",
-                        "front": "مننژ چیست؟",
-                        "back": "سه پردهٔ محافظ مغز و نخاع؛ مایع مغزی‌نخاعی میان آن‌ها ضربه‌گیر است."
-                    },
-                    {
-                        "id": "fc-1-16",
-                        "front": "انواع نورون؟",
-                        "back": "حسی (پیام به مرکز)، رابط (در مرکز) و حرکتی (از مرکز به اندام)."
-                    },
-                    {
-                        "id": "fc-1-17",
-                        "front": "انعکاس نخاعی؟",
-                        "back": "پاسخ سریع و غیرارادی که مرکز آن نخاع است؛ مثل کشیدن دست از جسم داغ."
-                    },
-                    {
-                        "id": "fc-1-18",
-                        "front": "لوب‌های مخ؟",
-                        "back": "پیشانی، آهیانه، پس‌سری و گیجگاهی."
-                    },
-                    {
-                        "id": "fc-1-19",
-                        "front": "سامانه کناره‌ای؟",
-                        "back": "شامل هیپوکامپ و آمیگدال؛ در هیجان و حافظه نقش دارد."
-                    },
-                    {
-                        "id": "fc-1-20",
-                        "front": "یاخته‌های پشتیبان؟",
-                        "back": "یاخته‌هایی که از نورون‌ها حمایت و تغذیه می‌کنند."
-                    },
-                    {
-                        "id": "fc-1-21",
-                        "front": "جسم پینه‌ای؟",
-                        "back": "دو نیم‌کره مخ را به هم وصل می‌کند."
-                    },
-                    {
-                        "id": "fc-1-22",
-                        "front": "قشر مخ؟",
-                        "back": "ماده خاکستری چین‌خورده؛ مرکز تفکر، حافظه و فعالیت‌های ارادی."
-                    },
-                    {
-                        "id": "fc-1-23",
-                        "front": "عصب چیست؟",
-                        "back": "مجموعه‌ای از رشته‌های عصبی که با بافت پیوندی احاطه شده‌اند."
-                    },
-                    {
-                        "id": "fc-1-24",
-                        "front": "ام‌اس (MS) چیست؟",
-                        "back": "بیماری خودایمنی که در آن غلاف میلین نورون‌ها تخریب می‌شود و هدایت پیام کند می‌شود."
-                    },
-                    {
-                        "id": "fc-1-25",
-                        "front": "مسیر پیام در انعکاس نخاعی؟",
-                        "back": "گیرنده ← نورون حسی ← نورون رابط (نخاع) ← نورون حرکتی ← اندام پاسخ‌دهنده."
-                    },
-                    {
-                        "id": "fc-1-26",
-                        "front": "دستگاه عصبی مرکزی و محیطی؟",
-                        "back": "مرکزی: مغز و نخاع. محیطی: اعصاب مغزی (۱۲ جفت) و نخاعی (۳۱ جفت)."
-                    },
-                    {
-                        "id": "fc-1-27",
-                        "front": "مغز میانی؟",
-                        "back": "بخشی از ساقهٔ مغز؛ در انعکاس‌های بینایی و شنوایی و کنترل حرکت نقش دارد."
-                    },
-                    {
-                        "id": "fc-1-28",
-                        "front": "پل مغزی؟",
-                        "back": "ارتباط بخش‌های مختلف مغز و کمک به تنظیم تنفس همراه بصل‌النخاع."
-                    },
-                    {
-                        "id": "fc-1-29",
-                        "front": "سرعت هدایت آکسون؟",
-                        "back": "در آکسون‌های میلین‌دار بیشتر است."
-                    },
-                    {
-                        "id": "fc-1-30",
-                        "front": "گره رانویه؟",
-                        "back": "فاصلهٔ بین دو بخش میلین‌دار؛ پتانسیل عمل در آن رخ می‌دهد."
-                    },
-                    {
-                        "id": "fc-1-31",
-                        "front": "نوع انتقال پمپ سدیم-پتاسیم؟",
-                        "back": "انتقال فعال با مصرف ATP."
-                    },
-                    {
-                        "id": "fc-1-32",
-                        "front": "قانون همه یا هیچ؟",
-                        "back": "اگر تحریک به آستانه برسد، پتانسیل عمل با اندازهٔ ثابت رخ می‌دهد؛ و در غیر این صورت رخ نمی‌دهد."
-                    },
-                    {
-                        "id": "fc-1-33",
-                        "front": "نمونه ناقل‌های عصبی؟",
-                        "back": "استیل‌کولین، دوپامین و سروتونین."
-                    },
-                    {
-                        "id": "fc-1-34",
-                        "front": "پس از آزادشدن ناقل چه می‌شود؟",
-                        "back": "ناقل بازجذب یا تجزیه می‌شود تا اثرش پایان یابد."
-                    },
-                    {
-                        "id": "fc-1-35",
-                        "front": "آسیب نخاع چه پیامدی دارد؟",
-                        "back": "ارتباط مغز با بخش‌های پایین‌تر از محل آسیب قطع می‌شود."
-                    },
-                    {
-                        "id": "fc-1-36",
-                        "front": "دستگاه عصبی خودمختار بر چه اندام‌هایی اثر می‌کند؟",
-                        "back": "ماهیچه‌های قلبی و صاف و غدد."
-                    },
-                    {
-                        "id": "fc-1-37",
-                        "front": "هم‌حس و پادهم‌حس در ضربان قلب؟",
-                        "back": "هم‌حس: افزایش ضربان، پادهم‌حس: کاهش ضربان و آرامش."
-                    },
-                    {
-                        "id": "fc-1-38",
-                        "front": "ماده سفید نخاع؟",
-                        "back": "مسیرهای صعودی و نزولی پیام میان مغز و بدن."
-                    },
-                    {
-                        "id": "fc-1-39",
-                        "front": "پتانسیل عمل چگونه در آکسون می‌رود؟",
-                        "back": "هر نقطه پتانسیل نقطهٔ بعدی را به آستانه می‌رساند و پتانسیل عمل در آن رخ می‌دهد."
-                    },
-                    {
-                        "id": "fc-1-40",
-                        "front": "سه بخش اصلی مغز؟",
-                        "back": "مخ، مخچه و ساقهٔ مغز."
-                    },
-                    {
-                        "id": "fc-1-41",
-                        "front": "غلظت یون‌ها در پتانسیل آرامش؟",
-                        "back": "Na⁺ در بیرون یاخته و K⁺ در داخل یاخته بیشتر است."
-                    },
-                    {
-                        "id": "fc-1-42",
-                        "front": "کانال‌های نشتی پتاسیم؟",
-                        "back": "کانال‌هایی که همیشه بازند و خروج کم K⁺ را ممکن می‌کنند."
-                    },
-                    {
-                        "id": "fc-1-43",
-                        "front": "منشأ ناهنجاری در سیناپس؟",
-                        "back": "کمبود یا ازدیاد ناقل عصبی پیام را مختل می‌کند."
-                    }
+                    { id: "fc-1-1", front: "تفاوت محل غلاف میلین در نورون حسی و حرکتی چیست؟", back: "نورون حسی: دندریت و آکسون میلین‌دار | نورون حرکتی: فقط آکسون میلین‌دار است." },
+                    { id: "fc-1-2", front: "نسبت جابه‌جایی یون‌ها توسط پمپ سدیم-پتاسیم چگونه است؟", back: "با مصرف ATP، همزمان ۳ یون سدیم (+Na) را به خارج و ۲ یون پتاسیم (+K) را به داخل یاخته منتقل می‌کند." },
+                    { id: "fc-1-3", front: "مقایسه دستگاه عصبی هیدر، پلاناریا و حشرات", back: "هیدر: شبکه عصبی بدون مغز | پلاناریا: مغز + دو طناب عصبی جانبی بدون جسم سلولی | حشرات: مغز + یک طناب عصبی شکمی گره‌دار." },
+                    { id: "fc-1-4", front: "پتانسیل آرامش چقدر است و چگونه حفظ می‌شود؟", back: "حدود ۷۰- میلی‌ولت. پمپ سدیم‌پتاسیم با مصرف ATP در هر دور ۳ یون Na⁺ را خارج و ۲ یون K⁺ را وارد می‌کند." }
                 ]
             },
             {
@@ -956,7 +1167,7 @@
                         title: "گفتار ۱: گیرنده‌های حسی",
                         notes: [
                             { type: "concept", text: "گیرنده‌های حسی انسان در ۵ گروه مکانیکی، شیمیایی، دمایی، نوری و درد قرار دارند. گیرنده‌های درد به دلیل اهمیت هشدار آسیب بافتی، سازش پیدا نمی‌کنند." },
-                            { type: "tip", text: "گیرنده‌های حس وضعیت (مکانیکی) در ماهیچه‌های اسکلتی، زردپی‌ها و کپسول مفصلی قرار دارند. گیرنده‌های دمای درون بدن در دیواره برخی سیاهرگ‌های بزرگ و هیپوتالاموس قرار دارند." }
+                            { type: "tip", text: "نکته ترکیبی: گیرنده‌های حس وضعیت (مکانیکی) در ماهیچه‌های اسکلتی، زردپی‌ها و کپسول مفصلی قرار دارند. گیرنده‌های دمای درون بدن در دیواره برخی سیاهرگ‌های بزرگ و هیپوتالاموس قرار دارند." }
                         ]
                     },
                     {
@@ -964,7 +1175,8 @@
                         title: "گفتار ۲: حواس ویژه",
                         notes: [
                             { type: "concept", text: "هنگام دیدن اشیای نزدیک، ماهیچه‌های مژگانی منقبض و عدسی ضخیم و همگراتر می‌شود (تطابق). در نزدیک‌بینی تصویر جلوی شبکیه می‌افتد (اصلاح با عدسی واگرا) و در دوربینی تصویر پشت شبکیه تشکیل می‌شود (عدسی همگرا)." },
-                            { type: "trap", text: "دام تستی: در مجاری نیم‌دایره (تعادل)، برخلاف حلزون گوش، بین یاخته‌های مژک‌دار هیچ یاخته پشتیبانی وجود ندارد! همچنین مزه اومامی مربوط به آمینواسید گلوتامات است." }
+                            { type: "trap", text: "دام تستی: در مجاری نیم‌دایره (تعادل)، برخلاف حلزون گوش، بین یاخته‌های مژک‌دار هیچ یاخته پشتیبانی وجود ندارد! همچنین مزه اومامی مربوط به آمینواسید گلوتامات است." },
+                            { type: "tip", text: "نکته ترکیبی: یاخته‌های مخروطی شبکیه برای دید رنگی و دقیق در نور زیاد تخصص یافته‌اند و در لکه زرد (به‌ویژه گودی مرکزی) متراکم‌اند؛ یاخته‌های استوانه‌ای به نور کم بسیار حساس‌اند." }
                         ]
                     },
                     {
@@ -983,186 +1195,9 @@
                     { q: "مزه اومامی که یکی از پنج مزه اصلی است، مربوط به کدام ترکیب است؟", options: ["ساکارز", "آمینواسید گلوتامات", "یون هیدروژن", "کلرید سدیم"], answer: 1, exp: "مزه اومامی مزه غالب غذاهای دارای آمینواسید گلوتامات است." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-2-1",
-                        "front": "تفاوت گیرنده‌های بویایی و نوری با گیرنده‌های چشایی و شنوایی چیست؟",
-                        "back": "گیرنده‌های بویایی و نوری خودشان نورون هستند، اما گیرنده‌های چشایی، شنوایی و تعادلی یاخته‌های غیرعصبی تمایزیافته‌اند."
-                    },
-                    {
-                        "id": "fc-2-2",
-                        "front": "مقایسه نزدیک‌بینی و دوربینی",
-                        "back": "نزدیک‌بینی: کره چشم بزرگ، تصویر جلوی شبکیه (عدسی واگرا) | دوربینی: کره چشم کوچک، تصویر پشت شبکیه (عدسی همگرا)."
-                    },
-                    {
-                        "id": "fc-2-3",
-                        "front": "سه لایه چشم؟",
-                        "back": "صلبیه (بیرونی)، مشیمیه (میانی، رنگدانه‌دار و رگدار) و شبکیه (درونی، گیرنده‌های نوری)."
-                    },
-                    {
-                        "id": "fc-2-4",
-                        "front": "تفاوت گیرنده‌های مخروطی و استوانه‌ای؟",
-                        "back": "مخروطی: دید رنگی و نور زیاد، متمرکز در لکه زرد. استوانه‌ای: دید در نور کم، سیاه‌وسفید."
-                    },
-                    {
-                        "id": "fc-2-5",
-                        "front": "نزدیک‌بینی و دوربینی با چه عدسی اصلاح می‌شوند؟",
-                        "back": "نزدیک‌بینی: عدسی واگرا. دوربینی: عدسی همگرا."
-                    },
-                    {
-                        "id": "fc-2-6",
-                        "front": "استخوانچه‌های گوش میانی؟",
-                        "back": "چکشی، سندانی و رکابی؛ ارتعاش صوت را تقویت و به گوش داخلی منتقل می‌کنند."
-                    },
-                    {
-                        "id": "fc-2-7",
-                        "front": "حلزون و مجاری نیم‌دایره چه کاری می‌کنند؟",
-                        "back": "حلزون: گیرنده‌های شنوایی. مجاری نیم‌دایره و اندام‌های درون گوش داخلی: حفظ تعادل."
-                    },
-                    {
-                        "id": "fc-2-8",
-                        "front": "انواع گیرنده‌های حسی؟",
-                        "back": "مکانیکی، دمایی، دردی، شیمیایی و نوری."
-                    },
-                    {
-                        "id": "fc-2-9",
-                        "front": "عنبیه و مردمک؟",
-                        "back": "عنبیه رنگ چشم را دارد و قطر مردمک را تنظیم می‌کند؛ در نور زیاد مردمک تنگ می‌شود."
-                    },
-                    {
-                        "id": "fc-2-10",
-                        "front": "تطابق عدسی؟",
-                        "back": "ماهیچه‌های مژکی ضخامت عدسی را تغییر می‌دهند؛ برای دید نزدیک عدسی ضخیم‌تر می‌شود."
-                    },
-                    {
-                        "id": "fc-2-11",
-                        "front": "نقطهٔ کور چیست؟",
-                        "back": "محل خروج عصب بینایی از شبکیه؛ گیرندهٔ نوری ندارد."
-                    },
-                    {
-                        "id": "fc-2-12",
-                        "front": "گیرنده‌های بویایی و چشایی؟",
-                        "back": "هر دو شیمیایی‌اند؛ بویایی در سقف حفرهٔ بینی و چشایی در جوانه‌های چشایی زبان."
-                    },
-                    {
-                        "id": "fc-2-13",
-                        "front": "لکه زرد؟",
-                        "back": "بیشترین مخروطی‌ها و دقیق‌ترین دید."
-                    },
-                    {
-                        "id": "fc-2-14",
-                        "front": "زلالیه و زجاجیه؟",
-                        "back": "زلالیه جلوی عدسی و زجاجیه پشت آن است؛ شکل چشم و تغذیه را تأمین می‌کنند."
-                    },
-                    {
-                        "id": "fc-2-15",
-                        "front": "شیپور استاش؟",
-                        "back": "گوش میانی را به حلق وصل می‌کند و فشار دو سوی پردهٔ صماخ را برابر می‌کند."
-                    },
-                    {
-                        "id": "fc-2-16",
-                        "front": "گیرنده‌های شنوایی؟",
-                        "back": "یاخته‌های مویی حلزون با لرزش مایع تحریک می‌شوند."
-                    },
-                    {
-                        "id": "fc-2-17",
-                        "front": "قرنیه؟",
-                        "back": "بخش شفاف جلوی صلبیه که بیشترین شکست نور را انجام می‌دهد."
-                    },
-                    {
-                        "id": "fc-2-18",
-                        "front": "گوش خارجی؟",
-                        "back": "لالهٔ گوش و مجرای شنوایی؛ جمع‌آوری صوت و هدایت آن به پردهٔ صماخ."
-                    },
-                    {
-                        "id": "fc-2-19",
-                        "front": "آستیگماتیسم؟",
-                        "back": "نامنظم‌بودن انحنای قرنیه یا عدسی؛ با عدسی استوانه‌ای اصلاح می‌شود."
-                    },
-                    {
-                        "id": "fc-2-20",
-                        "front": "حس‌های پیکری؟",
-                        "back": "لمس، فشار، دما، درد و حس وضعیت."
-                    },
-                    {
-                        "id": "fc-2-21",
-                        "front": "رنگ‌کوری؟",
-                        "back": "نقص در گیرنده‌های مخروطی؛ شایع‌ترین نوع قرمز-سبز و وابسته به کروموزوم X است."
-                    },
-                    {
-                        "id": "fc-2-22",
-                        "front": "دید دوچشمی؟",
-                        "back": "همپوشانی میدان دید دو چشم که امکان درک عمق و فاصله را می‌دهد."
-                    },
-                    {
-                        "id": "fc-2-23",
-                        "front": "مزه‌های اصلی؟",
-                        "back": "شیرین، شور، ترش، تلخ و اومامی."
-                    },
-                    {
-                        "id": "fc-2-24",
-                        "front": "گیرنده‌های درد؟",
-                        "back": "انتهای آزاد دندریت‌های نورون‌های حسی."
-                    },
-                    {
-                        "id": "fc-2-25",
-                        "front": "اشک چه نقشی دارد؟",
-                        "back": "رطوبت‌رسانی و محافظت از چشم؛ لیزوزیم میکروب‌ها را می‌کشد."
-                    },
-                    {
-                        "id": "fc-2-26",
-                        "front": "مسیر پیام بینایی؟",
-                        "back": "شبکیه ← عصب بینایی ← تالاموس ← قشر بینایی (پس‌سری)."
-                    },
-                    {
-                        "id": "fc-2-27",
-                        "front": "پردهٔ صماخ؟",
-                        "back": "با امواج صوت می‌لرزد و ارتعاش را به استخوانچه‌ها می‌رساند."
-                    },
-                    {
-                        "id": "fc-2-28",
-                        "front": "ویژگی عدسی چشم؟",
-                        "back": "شفاف، انعطاف‌پذیر و محدب (دو سو برآمده)."
-                    },
-                    {
-                        "id": "fc-2-29",
-                        "front": "گیرنده‌های مکانیکی پوست؟",
-                        "back": "لمس و فشار را تشخیص می‌دهند."
-                    },
-                    {
-                        "id": "fc-2-30",
-                        "front": "جهت‌یابی صدا؟",
-                        "back": "مغز با مقایسهٔ پیام دو گوش جهت صدا را تشخیص می‌دهد."
-                    },
-                    {
-                        "id": "fc-2-31",
-                        "front": "مسیر صوت در گوش؟",
-                        "back": "پردهٔ صماخ ← استخوانچه‌ها ← مایع حلزون ← یاخته‌های مویی ← عصب شنوایی."
-                    },
-                    {
-                        "id": "fc-2-32",
-                        "front": "تنگ‌شدن مردمک؟",
-                        "back": "با انقباض ماهیچه‌های حلقوی عنبیه در نور زیاد."
-                    },
-                    {
-                        "id": "fc-2-33",
-                        "front": "انواع حس دما؟",
-                        "back": "گیرنده‌های سرما و گرما."
-                    },
-                    {
-                        "id": "fc-2-34",
-                        "front": "مسیر نور تا شبکیه؟",
-                        "back": "قرنیه، زلالیه، مردمک، عدسی، زجاجیه و سپس شبکیه."
-                    },
-                    {
-                        "id": "fc-2-35",
-                        "front": "کانون تصویر در نزدیک‌بینی و دوربینی؟",
-                        "back": "نزدیک‌بینی: جلوی شبکیه. دوربینی: پشت شبکیه."
-                    },
-                    {
-                        "id": "fc-2-36",
-                        "front": "انواع مخروطی؟",
-                        "back": "سه نوع برای نور آبی، سبز و قرمز."
-                    }
+                    { id: "fc-2-1", front: "تفاوت گیرنده‌های بویایی و نوری با گیرنده‌های چشایی و شنوایی چیست؟", back: "گیرنده‌های بویایی و نوری خودشان نورون هستند، اما گیرنده‌های چشایی، شنوایی و تعادلی یاخته‌های غیرعصبی تمایزیافته‌اند." },
+                    { id: "fc-2-2", front: "مقایسه نزدیک‌بینی و دوربینی", back: "نزدیک‌بینی: کره چشم بزرگ، تصویر جلوی شبکیه (عدسی واگرا) | دوربینی: کره چشم کوچک، تصویر پشت شبکیه (عدسی همگرا)." },
+                    { id: "fc-2-3", front: "سه لایه چشم؟", back: "صلبیه (بیرونی)، مشیمیه (میانی، رنگدانه‌دار و رگدار) و شبکیه (درونی، گیرنده‌های نوری)." }
                 ]
             },
             {
@@ -1178,7 +1213,7 @@
                         title: "گفتار ۱: استخوان‌ها و اسکلت",
                         notes: [
                             { type: "concept", text: "در بافت استخوانی متراکم، تیغه‌های استخوانی پیرامون مجرای هاورس (شامل رگ‌های خونی و اعصاب) سامانه هاورس را می‌سازند. مغز قرمز در حفره‌های بافت استخوانی اسفنجی دو سر استخوان دراز و مغز زرد در مجرای مرکزی تنه قرار دارد." },
-                            { type: "tip", text: "درشت‌نی برخلاف نازک‌نی مستقیماً با استخوان ران مفصل زانو را می‌سازد. رباط‌ها استخوان‌ها را به هم و زردپی‌ها ماهیچه‌ها را به استخوان‌ها متصل می‌کنند." },
+                            { type: "tip", text: "نکته ترکیبی: درشت‌نی برخلاف نازک‌نی مستقیماً با استخوان ران مفصل زانو را می‌سازد. رباط‌ها استخوان‌ها را به هم و زردپی‌ها ماهیچه‌ها را به استخوان‌ها متصل می‌کنند." },
                             { type: "trap", text: "دام تستی: در پوکی استخوان توده استخوانی کاهش می‌یابد و استخوان‌ها شکننده می‌شوند. ویتامین D و کلسیم و ورزش منظم از پوکی استخوان پیشگیری می‌کنند." }
                         ]
                     },
@@ -1188,7 +1223,7 @@
                         notes: [
                             { type: "concept", text: "هر سارکومر بین دو خط Z قرار دارد و شامل رشته‌های ضخیم (میوزین) و نازک (اکتین) است. هنگام انقباض، خطوط Z به هم نزدیک می‌شوند و طول سارکومر کوتاه می‌شود اما طول رشته‌های اکتین و میوزین ثابت می‌ماند." },
                             { type: "trap", text: "دام تستی: تارهای ماهیچه‌ای کند (قرمز) دارای میوگلوبین و میتوکندری فراوان، خون‌رسانی بالا و تنفس هوازی هستند و دیر خسته می‌شوند؛ تارهای تند (سفید) برای حرکات سرعتی و انفجاری مناسب‌اند." },
-                            { type: "tip", text: "یون کلسیم (Ca2+) از شبکه آندوپلاسمی تار ماهیچه‌ای آزاد می‌شود تا محل اتصال سر میوزین به اکتین آزاد شود؛ ATP نیز برای جدا شدن سر میوزین و خم شدن آن ضروری است." }
+                            { type: "tip", text: "نکته ترکیبی: یون کلسیم (Ca2+) از شبکه آندوپلاسمی تار ماهیچه‌ای آزاد می‌شود تا محل اتصال سر میوزین به اکتین آزاد شود؛ ATP نیز برای جدا شدن سر میوزین و خم شدن آن ضروری است." }
                         ]
                     }
                 ],
@@ -1199,186 +1234,8 @@
                     { q: "کدام استخوان به تنهایی با استخوان ران مفصل زانو را می‌سازد؟", options: ["نازک‌نی", "درشت‌نی", "زند زبرین", "زند زیرین"], answer: 1, exp: "درشت‌نی مستقیماً در مفصل زانو شرکت دارد." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-3-1",
-                        "front": "تغییرات سارکومر هنگام انقباض ماهیچه اسکلتی چیست؟",
-                        "back": "خطوط Z به هم نزدیک و طول سارکومر کوتاه می‌شود، بخش روشن باریک می‌شود اما طول رشته‌های اکتین و میوزین ثابت می‌ماند."
-                    },
-                    {
-                        "id": "fc-3-2",
-                        "front": "مقایسه تارهای ماهیچه‌ای کند و تند",
-                        "back": "تار کند: قرمز، میوگلوبین و میتوکندری فراوان، مقاوم به خستگی | تار تند: سفید، میوگلوبین کم، سرعتی و زودخسته."
-                    },
-                    {
-                        "id": "fc-3-3",
-                        "front": "مقایسه سه نوع ماهیچه؟",
-                        "back": "اسکلتی: ارادی، مخطط، چندهسته‌ای. قلبی: غیرارادی، مخطط، منشعب. صاف: غیرارادی، بدون خطوط."
-                    },
-                    {
-                        "id": "fc-3-4",
-                        "front": "واحد انقباضی ماهیچه چیست؟",
-                        "back": "ساکومر؛ رشته‌های اکتین و میوزین روی هم می‌لغزند و با مصرف ATP و حضور کلسیم انقباض رخ می‌دهد."
-                    },
-                    {
-                        "id": "fc-3-5",
-                        "front": "منابع انرژی ماهیچه؟",
-                        "back": "ATP ذخیره، کراتین فسفات، تنفس هوازی و تنفس بی‌هوازی (تولید لاکتیک‌اسید)."
-                    },
-                    {
-                        "id": "fc-3-6",
-                        "front": "استئوبلاست و استئوکلاست؟",
-                        "back": "استئوبلاست: سازنده بافت استخوانی. استئوکلاست: تخریب‌کننده و بازجذب."
-                    },
-                    {
-                        "id": "fc-3-7",
-                        "front": "تاندون و لیگامان؟",
-                        "back": "تاندون: اتصال ماهیچه به استخوان. لیگامان (رباط): اتصال استخوان به استخوان."
-                    },
-                    {
-                        "id": "fc-3-8",
-                        "front": "انواع مفصل؟",
-                        "back": "ثابت (جمجمه)، نیمه‌متحرک (ستون مهره) و متحرک (زانو، شانه)."
-                    },
-                    {
-                        "id": "fc-3-9",
-                        "front": "تار کند و تار تند ماهیچه؟",
-                        "back": "کند: میوگلوبین و راکیزهٔ زیاد، هوازی، مقاوم به خستگی. تند: میوگلوبین کم، بی‌هوازی، زود خسته می‌شود."
-                    },
-                    {
-                        "id": "fc-3-10",
-                        "front": "بافت استخوانی متراکم و اسفنجی؟",
-                        "back": "متراکم: سطح استخوان. اسفنجی: درون استخوان با حفره‌های پر از مغز استخوان."
-                    },
-                    {
-                        "id": "fc-3-11",
-                        "front": "مغز استخوان قرمز و زرد؟",
-                        "back": "قرمز: تولید یاخته‌های خونی. زرد: ذخیرهٔ چربی."
-                    },
-                    {
-                        "id": "fc-3-12",
-                        "front": "نقش غضروف؟",
-                        "back": "بافت پیوندی انعطاف‌پذیر و بدون رگ؛ روی سطح مفصل‌ها ضربه‌گیر است."
-                    },
-                    {
-                        "id": "fc-3-13",
-                        "front": "ماهیچه‌های همکار و ناهمکار؟",
-                        "back": "در حرکت متقابل (مثل دوسر و سه‌سر بازو) یکی منقبض و دیگری شل می‌شود."
-                    },
-                    {
-                        "id": "fc-3-14",
-                        "front": "نقش کلسیم در انقباض؟",
-                        "back": "آزاد‌شدن کلسیم، اتصال میوزین به اکتین را ممکن می‌کند."
-                    },
-                    {
-                        "id": "fc-3-15",
-                        "front": "استخوان‌های محوری و آویزی؟",
-                        "back": "محوری: جمجمه، ستون مهره و قفسه سینه. آویزی: دست‌ها، پاها و کمربندها."
-                    },
-                    {
-                        "id": "fc-3-16",
-                        "front": "ستون مهره؟",
-                        "back": "۷ گردنی، ۱۲ پشتی، ۵ کمری، خاجی و دنبالچه."
-                    },
-                    {
-                        "id": "fc-3-17",
-                        "front": "ساختار ماهیچه اسکلتی؟",
-                        "back": "تار ماهیچه ← میوفیبریل ← ساکومر."
-                    },
-                    {
-                        "id": "fc-3-18",
-                        "front": "ماهیچه صاف در کجاست؟",
-                        "back": "در جدار لوله گوارش و رگ‌ها."
-                    },
-                    {
-                        "id": "fc-3-19",
-                        "front": "مایع مفصلی؟",
-                        "back": "مفصل را روان می‌کند و اصطکاک را کم می‌کند."
-                    },
-                    {
-                        "id": "fc-3-20",
-                        "front": "پوکی استخوان؟",
-                        "back": "کاهش تراکم استخوان؛ کلسیم و ورزش از آن پیشگیری می‌کنند."
-                    },
-                    {
-                        "id": "fc-3-21",
-                        "front": "انواع استخوان از نظر شکل؟",
-                        "back": "دراز، کوتاه و پهن."
-                    },
-                    {
-                        "id": "fc-3-22",
-                        "front": "بخش‌های استخوان دراز؟",
-                        "back": "تنه (دیافیز) و دو سر (اپی‌فیز)."
-                    },
-                    {
-                        "id": "fc-3-23",
-                        "front": "ساکومر از کجا تا کجاست؟",
-                        "back": "فاصلهٔ بین دو خط Z پیاپی در رشتهٔ ماهیچه."
-                    },
-                    {
-                        "id": "fc-3-24",
-                        "front": "قفسه سینه؟",
-                        "back": "دنده‌ها و جناغ؛ محافظت از قلب و شش‌ها."
-                    },
-                    {
-                        "id": "fc-3-25",
-                        "front": "مفصل لولایی و کروی؟",
-                        "back": "لولایی: زانو. کروی: شانه."
-                    },
-                    {
-                        "id": "fc-3-26",
-                        "front": "نقش ویتامین D در استخوان؟",
-                        "back": "کمک به جذب کلسیم از روده."
-                    },
-                    {
-                        "id": "fc-3-27",
-                        "front": "وظایف دستگاه حرکتی؟",
-                        "back": "حرکت، حفاظت، ذخیرهٔ کلسیم و تولید یاخته‌های خونی در مغز استخوان."
-                    },
-                    {
-                        "id": "fc-3-28",
-                        "front": "ATP چرا برای انقباض لازم است؟",
-                        "back": "برای لغزش میوزین روی اکتین و جداشدن آن از اکتین."
-                    },
-                    {
-                        "id": "fc-3-29",
-                        "front": "تونوس ماهیچه؟",
-                        "back": "انقباض خفیف و دائمی ماهیچه‌ها در حالت استراحت."
-                    },
-                    {
-                        "id": "fc-3-30",
-                        "front": "اجزای مفصل؟",
-                        "back": "غضروف، کپسول مفصلی و مایع مفصلی."
-                    },
-                    {
-                        "id": "fc-3-31",
-                        "front": "طولانی‌ترین استخوان بدن؟",
-                        "back": "استخوان ران."
-                    },
-                    {
-                        "id": "fc-3-32",
-                        "front": "چرا تار ماهیچه چندهسته‌ای است؟",
-                        "back": "چند یاخته با هم ادغام شده‌اند."
-                    },
-                    {
-                        "id": "fc-3-33",
-                        "front": "منحنی‌های ستون مهره؟",
-                        "back": "منحنی‌ها به ضربه‌گیری و حفظ تعادل کمک می‌کنند."
-                    },
-                    {
-                        "id": "fc-3-34",
-                        "front": "اسکلت جنین؟",
-                        "back": "بخش بزرگی از آن غضروفی است و به مرور به استخوان تبدیل می‌شود."
-                    },
-                    {
-                        "id": "fc-3-35",
-                        "front": "ماهیچه و گرما؟",
-                        "back": "انقباض ماهیچه گرما تولید می‌کند و دمای بدن را حفظ می‌کند."
-                    },
-                    {
-                        "id": "fc-3-36",
-                        "front": "استخوان‌های پا؟",
-                        "back": "ران، درشت‌نی و نازک‌نی."
-                    }
+                    { id: "fc-3-1", front: "تغییرات سارکومر هنگام انقباض ماهیچه اسکلتی چیست؟", back: "خطوط Z به هم نزدیک و طول سارکومر کوتاه می‌شود، بخش روشن باریک می‌شود اما طول رشته‌های اکتین و میوزین ثابت می‌ماند." },
+                    { id: "fc-3-2", front: "مقایسه تارهای ماهیچه‌ای کند و تند", back: "تار کند: قرمز، میوگلوبین و میتوکندری فراوان، مقاوم به خستگی | تار تند: سفید، میوگلوبین کم، سرعتی و زودخسته." }
                 ]
             },
             {
@@ -1394,7 +1251,7 @@
                         title: "گفتار ۱: ارتباط شیمیایی",
                         notes: [
                             { type: "concept", text: "پیک‌های شیمیایی به دو دسته کوتاه‌بُرد (مانند ناقل‌های عصبی و هیستامین) و دوربُرد (هورمون‌ها که از غدد درون‌ریز به خون ترشح می‌شوند) تقسیم می‌شوند. هر هورمون فقط بر یاخته‌های هدف دارای گیرنده اختصاصی خود اثر می‌گذارد." },
-                            { type: "tip", text: "هورمون‌های آمینواسیدی (پروتئینی) گیرنده در غشای یاخته هدف دارند (به‌جز هورمون‌های تیروئیدی)، اما هورمون‌های استروئیدی (مثل کورتیزول، آلدوسترون، تستوسترون و استروژن) از غشا عبور کرده و گیرنده درون یاخته (سیتوپلاسم یا هسته) دارند." }
+                            { type: "tip", text: "نکته ترکیبی: هورمون‌های آمینواسیدی (پروتئینی) گیرنده در غشای یاخته هدف دارند (به‌جز هورمون‌های تیروئیدی)، اما هورمون‌های استروئیدی (مثل کورتیزول، آلدوسترون، تستوسترون و استروژن) از غشا عبور کرده و گیرنده درون یاخته (سیتوپلاسم یا هسته) دارند." }
                         ]
                     },
                     {
@@ -1404,7 +1261,7 @@
                             { type: "concept", text: "هیپوفیز شامل بخش پیشین (تولیدکننده ۶ هورمون از جمله رشد، پرولاکتین، TSH، ACTH، FSH و LH)، بخش میانی و بخش پسین (ذخیره و ترشح اکسی‌توسین و ضدادراری ADH ساخته‌شده در هیپوتالاموس) است." },
                             { type: "trap", text: "دام تستی: کلسی‌تونین از غده تیروئید ترشح می‌شود و کلسیم خون را کاهش می‌دهد، اما هورمون پاراتیروئید (PTH) کلسیم خون را افزایش می‌دهد (از طریق برداشت از استخوان، بازجذب در کلیه و فعال کردن ویتامین D در روده)." },
                             { type: "concept", text: "بخش قشری غده فوق‌کلیه هورمون‌های استروئیدی کورتیزول (افزایش قند خون و سرکوب ایمنی) و آلدوسترون (بازجذب سدیم و دفع پتاسیم در کلیه) می‌سازد، در حالی که بخش مرکزی اپی‌نفرین و نوراپی‌نفرین (پاسخ سریع ستیز و گریز) ترشح می‌کند." },
-                            { type: "tip", text: "جزایر لانگرهانس در پانکراس: یاخته‌های آلفا گلوکاگون (افزایش قند خون) و یاخته‌های بتا انسولین (کاهش قند خون با افزایش ورود گلوکز به یاخته‌ها) ترشح می‌کنند. غده پینه‌آل (اپی‌فیز) نیز ملاتونین ترشح می‌کند." }
+                            { type: "tip", text: "نکته ترکیبی: جزایر لانگرهانس در پانکراس شامل یاخته‌های آلفا (ترشح گلوکاگون و افزایش قند خون) و یاخته‌های بتا (ترشح انسولین و کاهش قند خون) است." }
                         ]
                     }
                 ],
@@ -1415,181 +1272,8 @@
                     { q: "افزایش ترشح هورمون رشد پس از بسته شدن صفحات رشد استخوانی منجر به کدام بیماری می‌شود؟", options: ["ژیگانتیسم", "آکرومگالی", "کرتینیسم", "دیابت بی‌مزه"], answer: 1, exp: "افزایش هورمون رشد در بزرگسالی (پس از بسته شدن صفحات رشد) باعث رشد قطری استخوان‌های صورت، دست و پا (آکرومگالی) می‌شود." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-4-1",
-                        "front": "تفاوت دو لوب هیپوفیز؟",
-                        "back": "پیشین: هورمون‌های رشد و تحریک‌کننده غدد. پسین: ذخیره و ترشح اکسی‌توسین و ضدادراری (ساخته‌شده در هیپوتالاموس)."
-                    },
-                    {
-                        "id": "fc-4-2",
-                        "front": "وظیفه تیروئید و پاراتیروئید؟",
-                        "back": "تیروئید: تیروکسین (سوخت‌وساز) و کلسی‌تونین. پاراتیروئید: پاراتورمون، افزایش کلسیم خون."
-                    },
-                    {
-                        "id": "fc-4-3",
-                        "front": "انسولین و گلوکاگون؟",
-                        "back": "انسولین: کاهش قند خون. گلوکاگون: افزایش قند خون؛ هر دو از لوزالمعده."
-                    },
-                    {
-                        "id": "fc-4-4",
-                        "front": "هورمون‌های فوق‌کلیه؟",
-                        "back": "قشر: کورتیزول و آلدوسترون. مرکز: آدرنالین و نورآدرنالین."
-                    },
-                    {
-                        "id": "fc-4-5",
-                        "front": "بازخورد منفی یعنی چه؟",
-                        "back": "افزایش اثر هورمون، ترشح آن را مهار می‌کند و تعادل حفظ می‌شود."
-                    },
-                    {
-                        "id": "fc-4-6",
-                        "front": "تفاوت هورمون و ناقل عصبی؟",
-                        "back": "هورمون با خون به یاختهٔ هدف می‌رسد؛ ناقل عصبی در سیناپس عمل می‌کند و اثرش سریع‌تر است."
-                    },
-                    {
-                        "id": "fc-4-7",
-                        "front": "گیرندهٔ هورمون کجاست؟",
-                        "back": "هورمون‌های آب‌دوست: گیرندهٔ غشایی. هورمون‌های لیپیدی (استروئیدی): گیرندهٔ درون یاخته."
-                    },
-                    {
-                        "id": "fc-4-8",
-                        "front": "اپی‌فیز و تیموس؟",
-                        "back": "اپی‌فیز ملاتونین (ریتم شبانه‌روزی) می‌سازد؛ تیموس در رشد لنفوسیت‌های T نقش دارد."
-                    },
-                    {
-                        "id": "fc-4-9",
-                        "front": "اریتروپویتین؟",
-                        "back": "از کلیه ترشح می‌شود و تولید گویچه‌های قرمز را افزایش می‌دهد."
-                    },
-                    {
-                        "id": "fc-4-10",
-                        "front": "دیابت نوع ۱ و ۲؟",
-                        "back": "نوع ۱: تخریب یاخته‌های بتا و کمبود انسولین. نوع ۲: کاهش پاسخ یاخته‌ها به انسولین."
-                    },
-                    {
-                        "id": "fc-4-11",
-                        "front": "هورمون رشد؟",
-                        "back": "از هیپوفیز پیشین؛ کمبودش کوتولگی و زیادی‌اش غول‌پیکری می‌دهد."
-                    },
-                    {
-                        "id": "fc-4-12",
-                        "front": "پرولاکتین و اکسی‌توسین؟",
-                        "back": "پرولاکتین: تولید شیر. اکسی‌توسین: انقباض رحم و خروج شیر."
-                    },
-                    {
-                        "id": "fc-4-13",
-                        "front": "کورتیزول و آلدوسترون؟",
-                        "back": "کورتیزول: مقابله با استرس و افزایش قند خون. آلدوسترون: بازجذب سدیم."
-                    },
-                    {
-                        "id": "fc-4-14",
-                        "front": "آدرنالین؟",
-                        "back": "پاسخ جنگ‌وگریز: افزایش ضربان قلب و قند خون."
-                    },
-                    {
-                        "id": "fc-4-15",
-                        "front": "غدد درون‌ریز و برون‌ریز؟",
-                        "back": "درون‌ریز: بدون مجرا و ترشح به خون. برون‌ریز: با مجرا."
-                    },
-                    {
-                        "id": "fc-4-16",
-                        "front": "یاخته‌های جزایر لانگرهانس؟",
-                        "back": "بتا انسولین و آلفا گلوکاگون می‌سازند."
-                    },
-                    {
-                        "id": "fc-4-17",
-                        "front": "کمبود ید؟",
-                        "back": "باعث بزرگ‌شدن تیروئید (گواتر) می‌شود."
-                    },
-                    {
-                        "id": "fc-4-18",
-                        "front": "هورمون‌های جنسی؟",
-                        "back": "تستوسترون از بیضه؛ استروژن و پروژسترون از تخمدان."
-                    },
-                    {
-                        "id": "fc-4-19",
-                        "front": "کلسیم خون چگونه تنظیم می‌شود؟",
-                        "back": "پاراتورمون کلسیم خون را بالا می‌برد و کلسی‌تونین آن را کاهش می‌دهد."
-                    },
-                    {
-                        "id": "fc-4-20",
-                        "front": "ارتباط هیپوتالاموس و هیپوفیز؟",
-                        "back": "هیپوتالاموس با هورمون‌های آزادکننده و مهارکننده، ترشح هیپوفیز پیشین را کنترل می‌کند."
-                    },
-                    {
-                        "id": "fc-4-21",
-                        "front": "هورمون TSH؟",
-                        "back": "از هیپوفیز پیشین؛ تیروئید را به ترشح تیروکسین تحریک می‌کند."
-                    },
-                    {
-                        "id": "fc-4-22",
-                        "front": "کمبود هورمون ضدادراری؟",
-                        "back": "دفع زیاد ادرار رقیق و تشنگی زیاد."
-                    },
-                    {
-                        "id": "fc-4-23",
-                        "front": "محل غدد فوق‌کلیه؟",
-                        "back": "بالای کلیه‌ها."
-                    },
-                    {
-                        "id": "fc-4-24",
-                        "front": "بازخورد مثبت در زایمان؟",
-                        "back": "انقباض رحم ترشح اکسی‌توسین را بیشتر می‌کند و این انقباض را شدیدتر می‌کند."
-                    },
-                    {
-                        "id": "fc-4-25",
-                        "front": "غدد درون‌ریز اصلی؟",
-                        "back": "هیپوفیز، تیروئید، پاراتیروئید، فوق‌کلیه، لوزالمعده، غدد جنسی، اپی‌فیز و تیموس."
-                    },
-                    {
-                        "id": "fc-4-26",
-                        "front": "محل تیروئید؟",
-                        "back": "جلوی نای، پایین‌تر از حنجره."
-                    },
-                    {
-                        "id": "fc-4-27",
-                        "front": "پاراتیروئید چند تا است؟",
-                        "back": "چهار غده کوچک پشت تیروئید."
-                    },
-                    {
-                        "id": "fc-4-28",
-                        "front": "انسولین چه اثری دارد؟",
-                        "back": "ورود گلوکز به یاخته‌ها را افزایش می‌دهد و ذخیرهٔ آن به شکل گلیکوژن را تسهیل می‌کند."
-                    },
-                    {
-                        "id": "fc-4-29",
-                        "front": "گلوکاگون بر کبد؟",
-                        "back": "تجزیهٔ گلیکوژن و آزادشدن گلوکز به خون."
-                    },
-                    {
-                        "id": "fc-4-30",
-                        "front": "لوزالمعده هم برون‌ریز است؟",
-                        "back": "بله، آنزیم‌های گوارشی را با مجرا به دوازده‌ا می‌ریزد و بخش درون‌ریز هم دارد."
-                    },
-                    {
-                        "id": "fc-4-31",
-                        "front": "چرا هورمون فقط یاختهٔ هدف را تحت تأثیر قرار می‌دهد؟",
-                        "back": "فقط اون گیرندهٔ اختصاصی همان هورمون را دارد."
-                    },
-                    {
-                        "id": "fc-4-32",
-                        "front": "پرکاری تیروئید؟",
-                        "back": "سوخت‌وساز بالا و کاهش وزن."
-                    },
-                    {
-                        "id": "fc-4-33",
-                        "front": "کورتیزول در مدت طولانی؟",
-                        "back": "ایمنی را سرکوب می‌کند."
-                    },
-                    {
-                        "id": "fc-4-34",
-                        "front": "هورمون‌های هیپوفیز پیشین؟",
-                        "back": "رشد، پرولاکتین، TSH، ACTH، FSH و LH."
-                    },
-                    {
-                        "id": "fc-4-35",
-                        "front": "هورمون پروتئینی و استروئیدی؟",
-                        "back": "پروتئینی: مثل انسولین. استروئیدی: مثل کورتیزول و استروژن."
-                    }
+                    { id: "fc-4-1", front: "تفاوت دو لوب هیپوفیز؟", back: "پیشین: هورمون‌های رشد و تحریک‌کننده غدد. پسین: ذخیره و ترشح اکسی‌توسین و ضدادراری (ساخته‌شده در هیپوتالاموس)." },
+                    { id: "fc-4-2", front: "وظیفه تیروئید و پاراتیروئید؟", back: "تیروئید: تیروکسین (سوخت‌وساز) و کلسی‌تونین. پاراتیروئید: پاراتورمون، افزایش کلسیم خون." }
                 ]
             },
             {
@@ -1605,7 +1289,7 @@
                         title: "گفتار ۱: نخستین خط دفاعی",
                         notes: [
                             { type: "concept", text: "نخستین خط دفاع غیراختصاصی مانع ورود میکروب‌ها به محیط داخلی بدن می‌شود و شامل پوست (لایه شاخی، اسیدهای چرب و لیزوزیم عرق) و مخاط‌ها (ماده مخاطی چسبناک، لیزوزیم اشک و بزاق، اسید معده و همزیست‌های میکروبی) است." },
-                            { type: "tip", text: "لیزوزیم آنزیمی است که دیواره یاخته‌ای باکتری‌ها را تخریب می‌کند و در اشک، بزاق، عرق و ترشحات مخاطی وجود دارد." }
+                            { type: "tip", text: "نکته ترکیبی: لیزوزیم آنزیمی است که دیواره یاخته‌ای باکتری‌ها را تخریب می‌کند و در اشک، بزاق، عرق و ترشحات مخاطی وجود دارد." }
                         ]
                     },
                     {
@@ -1622,7 +1306,7 @@
                         title: "گفتار ۳: سومین خط دفاعی",
                         notes: [
                             { type: "concept", text: "سومین خط دفاعی اختصاصی است و دارای حافظه ایمنی است. لنفوسیت‌ها در مغز استخوان منشأ می‌گیرند؛ لنفوسیت‌های B در مغز استخوان و لنفوسیت‌های T در تیموس بالغ و تکامل می‌یابند." },
-                            { type: "tip", text: "ایمنی هومورال با لنفوسیت‌های B (تبدیل به پلاسموسیت و ترشح پادتن) در برابر میکروب‌های خارج‌یاخته‌ای مبارزه می‌کند؛ ایمنی یاخته‌ای با لنفوسیت‌های T کشنده (ترشح پرفورین و آنزیم آپوپتوز) یاخته‌های سرطانی و آلوده به ویروس را نابود می‌کند." },
+                            { type: "tip", text: "نکته ترکیبی: ایمنی هومورال با لنفوسیت‌های B (تبدیل به پلاسموسیت و ترشح پادتن) در برابر میکروب‌های خارج‌یاخته‌ای مبارزه می‌کند؛ ایمنی یاخته‌ای با لنفوسیت‌های T کشنده (ترشح پرفورین و آنزیم آپوپتوز) یاخته‌های سرطانی و آلوده به ویروس را نابود می‌کند." },
                             { type: "trap", text: "دام تستی: پلاسموسیت‌ها فاقد گیرنده آنتی‌ژنی در سطح غشا هستند و فقط پادتن ترشح می‌کنند؛ اما یاخته‌های B خاطره گیرنده آنتی‌ژنی دارند." }
                         ]
                     }
@@ -1634,156 +1318,8 @@
                     { q: "پروتئین‌های مکمل از چه طریقی موجب نابودی میکروب‌ها می‌شوند؟", options: ["جلوگیری از همانندسازی ویروس در هسته", "ایجاد منفذ در غشای میکروب و متلاشی شدن آن", "تولید آنتی‌بادی اختصاصی", "افزایش دمای مرکز هیپوتالاموس"], answer: 1, exp: "پروتئین‌های مکمل پس از فعال شدن با ایجاد ساختار حلقوی و منفذ در غشای میکروب باعث ورود آب و لیز شدن آن می‌شوند." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-5-1",
-                        "front": "خطوط دفاعی بدن؟",
-                        "back": "اول: پوست، مخاط، ترشحات (لیزوزیم). دوم: بیگانه‌خوارها، انترفرون، التهاب، تب. سوم: ایمنی اختصاصی (لنفوسیت‌ها)."
-                    },
-                    {
-                        "id": "fc-5-2",
-                        "front": "نقش لنفوسیت B و T؟",
-                        "back": "B: تولید پادتن و یاخته‌های خاطره. T: T کشنده یاخته‌های آلوده را نابود و T کمک‌کننده پاسخ را تنظیم می‌کند."
-                    },
-                    {
-                        "id": "fc-5-3",
-                        "front": "ایمنی اختصاصی چه ویژگی‌هایی دارد؟",
-                        "back": "اختصاصی عمل می‌کند و حافظه ایمنی دارد؛ در تماس دوم سریع‌تر و قوی‌تر پاسخ می‌دهد."
-                    },
-                    {
-                        "id": "fc-5-4",
-                        "front": "آلرژی چگونه رخ می‌دهد؟",
-                        "back": "پاسخ بیش‌ازحد به مادهٔ بی‌خطر؛ ماست‌سل‌ها هیستامین آزاد می‌کنند."
-                    },
-                    {
-                        "id": "fc-5-5",
-                        "front": "ایدز چرا خطرناک است؟",
-                        "back": "ویروس HIV لنفوسیت‌های T کمک‌کننده را تخریب می‌کند و ایمنی ضعیف می‌شود."
-                    },
-                    {
-                        "id": "fc-5-6",
-                        "front": "التهاب چگونه رخ می‌دهد؟",
-                        "back": "هیستامین رگ‌ها را گشاد و نفوذپذیر می‌کند و گویچه‌های سفید به محل آسیب می‌رسند."
-                    },
-                    {
-                        "id": "fc-5-7",
-                        "front": "انترفرون؟",
-                        "back": "پروتئینی که یاختهٔ آلوده به ویروس ترشح می‌کند و یاخته‌های مجاور را مقاوم می‌کند."
-                    },
-                    {
-                        "id": "fc-5-8",
-                        "front": "یاخته‌های کشندهٔ طبیعی (NK)؟",
-                        "back": "یاخته‌های سرطانی و آلوده به ویروس را نابود می‌کنند."
-                    },
-                    {
-                        "id": "fc-5-9",
-                        "front": "واکسن و سرم؟",
-                        "back": "واکسن: ایمنی فعال با حافظه. سرم: پادتن آماده، موقت."
-                    },
-                    {
-                        "id": "fc-5-10",
-                        "front": "بیماری خودایمنی؟",
-                        "back": "لنفوسیت‌ها به یاخته‌های خودی حمله می‌کنند؛ مثل دیابت نوع ۱ و MS."
-                    },
-                    {
-                        "id": "fc-5-11",
-                        "front": "درشت‌خوار؟",
-                        "back": "از مونوسیت‌ها پدید می‌آید؛ بیگانه‌خواری می‌کند و پیام را به لنفوسیت‌ها می‌رساند."
-                    },
-                    {
-                        "id": "fc-5-12",
-                        "front": "نوتروفیل و ائوزینوفیل؟",
-                        "back": "نوتروفیل: بیگانه‌خواری سریع. ائوزینوفیل: مقابله با انگل‌ها."
-                    },
-                    {
-                        "id": "fc-5-13",
-                        "front": "پادتن؟",
-                        "back": "پروتئین Y شکل اختصاصی که به پادگن متصل می‌شود."
-                    },
-                    {
-                        "id": "fc-5-14",
-                        "front": "تب؟",
-                        "back": "افزایش دمای بدن؛ تکثیر میکروب‌ها را کند می‌کند."
-                    },
-                    {
-                        "id": "fc-5-15",
-                        "front": "اندام‌های لنفی؟",
-                        "back": "مغز استخوان، تیموس، طحال و گره‌های لنفی."
-                    },
-                    {
-                        "id": "fc-5-16",
-                        "front": "سدهای شیمیایی؟",
-                        "back": "اسید معده و ترشحات پوست میکروب‌ها را از بین می‌برند."
-                    },
-                    {
-                        "id": "fc-5-17",
-                        "front": "پادگن چیست؟",
-                        "back": "ماده‌ای که سامانهٔ ایمنی را تحریک می‌کند و پادتن علیه آن ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-5-18",
-                        "front": "محل بلوغ لنفوسیت‌ها؟",
-                        "back": "لنفوسیت‌ها در مغز استخوان ساخته می‌شوند؛ B در مغز استخوان و T در تیموس بالغ می‌شود."
-                    },
-                    {
-                        "id": "fc-5-19",
-                        "front": "گویچه‌های سفید دانه‌دار و بدون دانه؟",
-                        "back": "دانه‌دار: نوتروفیل، ائوزینوفیل و بازوفیل. بدون دانه: لنفوسیت و مونوسیت."
-                    },
-                    {
-                        "id": "fc-5-20",
-                        "front": "MHC چیست؟",
-                        "back": "مولکول‌های سطح یاخته‌ها که نشانهٔ خودی هستند."
-                    },
-                    {
-                        "id": "fc-5-21",
-                        "front": "پرفورین؟",
-                        "back": "پروتئینی که لنفوسیت T کشنده می‌سازد و در غشای یاختهٔ هدف سوراخ ایجاد می‌کند."
-                    },
-                    {
-                        "id": "fc-5-22",
-                        "front": "رد پیوند؟",
-                        "back": "لنفوسیت‌ها MHC بیگانه را تشخیص می‌دهند و به آن حمله می‌کنند."
-                    },
-                    {
-                        "id": "fc-5-23",
-                        "front": "T کمک‌کننده؟",
-                        "back": "با ترشح موادی، B و T کشنده را تحریک می‌کند."
-                    },
-                    {
-                        "id": "fc-5-24",
-                        "front": "رگ‌های لنفی؟",
-                        "back": "مایع بین‌یاخته‌ای را به خون برمی‌گردانند و در دفاع نقش دارند."
-                    },
-                    {
-                        "id": "fc-5-25",
-                        "front": "ایمنی غیراختصاصی؟",
-                        "back": "برای همهٔ میکروب‌ها یکسان عمل می‌کند."
-                    },
-                    {
-                        "id": "fc-5-26",
-                        "front": "گیرندهٔ لنفوسیت؟",
-                        "back": "هر لنفوسیت گیرنده‌ای برای یک پادگن دارد."
-                    },
-                    {
-                        "id": "fc-5-27",
-                        "front": "انتخاب و تکثیر؟",
-                        "back": "پادگن لنفوسیتی که گیرندهٔ مناسب دارد را انتخاب و تکثیر می‌کند."
-                    },
-                    {
-                        "id": "fc-5-28",
-                        "front": "ایمنی مادر به جنین؟",
-                        "back": "پادتن‌هایی از مادر به جنین منتقل می‌شوند."
-                    },
-                    {
-                        "id": "fc-5-29",
-                        "front": "عوامل بیماری‌زا؟",
-                        "back": "باکتری، ویروس، قارچ و انگل."
-                    },
-                    {
-                        "id": "fc-5-30",
-                        "front": "واکسن از چه ساخته می‌شود؟",
-                        "back": "میکروب ضعیف‌شده یا کشته‌شده یا بخشی از آن."
-                    }
+                    { id: "fc-5-1", front: "خطوط دفاعی بدن؟", back: "اول: پوست، مخاط، ترشحات (لیزوزیم). دوم: بیگانه‌خوارها، انترفرون، التهاب، تب. سوم: ایمنی اختصاصی (لنفوسیت‌ها)." },
+                    { id: "fc-5-2", front: "نقش لنفوسیت B و T؟", back: "B: تولید پادتن و یاخته‌های خاطره. T: T کشنده یاخته‌های آلوده را نابود و T کمک‌کننده پاسخ را تنظیم می‌کند." }
                 ]
             },
             {
@@ -1799,7 +1335,7 @@
                         title: "گفتار ۱: کروموزوم",
                         notes: [
                             { type: "concept", text: "در یاخته‌های یوکاریوتی، DNA به دور پروتئین‌های هیستون پیچیده و نوکلئوزوم‌ها را می‌سازد. فشرده‌ترین حالت ماده وراثتی در مرحله متافاز تقسیم به صورت کروموزوم مضاعف (دارای دو کروماتید خواهری متصل در سانترومر) دیده می‌شود." },
-                            { type: "tip", text: "یاخته‌های پیکری انسان دیپلوئید (2n=46) شامل ۲۲ جفت کروموزوم غیرجنسی و ۱ جفت کروموزوم جنسی (XX در زن و XY در مرد) هستند؛ گامت‌ها هاپلوئید (n=23) هستند." }
+                            { type: "tip", text: "نکته ترکیبی: یاخته‌های پیکری انسان دیپلوئید (2n=46) شامل ۲۲ جفت کروموزوم غیرجنسی و ۱ جفت کروموزوم جنسی (XX در زن و XY در مرد) هستند؛ گامت‌ها هاپلوئید (n=23) هستند." }
                         ]
                     },
                     {
@@ -1827,166 +1363,8 @@
                     { q: "سیتوکینز در یاخته‌های گیاهی به کمک ریزکیسه‌های کدام اندامک انجام می‌گیرد؟", options: ["شبکه آندوپلاسمی زبر", "دستگاه گلژی", "میتوکندری", "لیزوزوم"], answer: 1, exp: "در یاخته‌های گیاهی ریزکیسه‌های حاوی پیش‌سازهای دیواره از دستگاه گلژی به میانه یاخته آمده و تیغه میانی می‌سازند." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-6-1",
-                        "front": "مراحل چرخه یاخته‌ای؟",
-                        "back": "اینترفاز (G1، S، G2) و تقسیم (M: میتوز و سیتوکینز)."
-                    },
-                    {
-                        "id": "fc-6-2",
-                        "front": "مراحل میتوز؟",
-                        "back": "پروفاز، متافاز، آنافاز و تلوفاز."
-                    },
-                    {
-                        "id": "fc-6-3",
-                        "front": "میوز چه فرقی با میتوز دارد؟",
-                        "back": "دو بار تقسیم، چهار یاخته با نصف کروموزوم؛ کراسینگ‌اور در پروفاز ۱."
-                    },
-                    {
-                        "id": "fc-6-4",
-                        "front": "سرطان چگونه پدید می‌آید؟",
-                        "back": "جهش در ژن‌های کنترل‌کننده چرخه یاخته‌ای و ازکارافتادن نقاط وارسی؛ تقسیم بی‌رویه."
-                    },
-                    {
-                        "id": "fc-6-5",
-                        "front": "سندرم داون؟",
-                        "back": "تریزومی ۲۱ (سه کروموزوم شماره ۲۱) ناشی از ناجدا‌شدن کروموزوم‌ها در میوز."
-                    },
-                    {
-                        "id": "fc-6-6",
-                        "front": "کروموزوم‌های همتا؟",
-                        "back": "دو کروموزوم همانند از پدر و مادر؛ در انسان ۲۳ جفت (۴۶ کروموزوم)."
-                    },
-                    {
-                        "id": "fc-6-7",
-                        "front": "کروماتیدهای خواهری؟",
-                        "back": "حاصل همانندسازی DNA در مرحلهٔ S؛ در آنافاز میتوز از هم جدا می‌شوند."
-                    },
-                    {
-                        "id": "fc-6-8",
-                        "front": "سیتوکینز؟",
-                        "back": "تقسیم سیتوپلاسم؛ در جانوران با فرورفتگی غشا و در گیاهان با ساخت دیوارهٔ میانی."
-                    },
-                    {
-                        "id": "fc-6-9",
-                        "front": "چرا میوز تنوع ایجاد می‌کند؟",
-                        "back": "کراسینگ‌اور و آرایش تصادفی کروموزوم‌های همتا."
-                    },
-                    {
-                        "id": "fc-6-10",
-                        "front": "کاریوتایپ؟",
-                        "back": "تصویر مرتب‌شدهٔ کروموزوم‌ها در متافاز برای تشخیص ناهنجاری."
-                    },
-                    {
-                        "id": "fc-6-11",
-                        "front": "پروفاز میتوز؟",
-                        "back": "فشرده‌شدن کروموزوم‌ها، ناپدیدشدن هستک و غشای هسته و تشکیل دوک."
-                    },
-                    {
-                        "id": "fc-6-12",
-                        "front": "متافاز و آنافاز؟",
-                        "back": "متافاز: ردیف‌شدن کروموزوم‌ها در استوا. آنافاز: جداشدن کروماتیدهای خواهری."
-                    },
-                    {
-                        "id": "fc-6-13",
-                        "front": "نقطه وارسی؟",
-                        "back": "سازوکار کنترل چرخه؛ مثلاً بررسی سالم‌بودن DNA پیش از تقسیم."
-                    },
-                    {
-                        "id": "fc-6-14",
-                        "front": "تلوفاز؟",
-                        "back": "کروموزوم‌ها باز می‌شوند و هستک و غشای هسته دوباره ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-6-15",
-                        "front": "سه مرحلهٔ اینترفاز چه کارهایی انجام می‌دهند؟",
-                        "back": "مرحلهٔ اول (G1): رشد و ساخت پروتئین. مرحلهٔ S: همانندسازی DNA. مرحلهٔ دوم رشد (G2): آماده‌سازی برای تقسیم."
-                    },
-                    {
-                        "id": "fc-6-16",
-                        "front": "دیپلوئید و هاپلوئید؟",
-                        "back": "دیپلوئید (2n) دو مجموعه کروموزوم؛ هاپلوئید (n) یک مجموعه و در گامت‌ها."
-                    },
-                    {
-                        "id": "fc-6-17",
-                        "front": "تتراد؟",
-                        "back": "جفت کروموزوم همتا (چهار کروماتید) در پروفاز ۱ میوز."
-                    },
-                    {
-                        "id": "fc-6-18",
-                        "front": "سندرم ترنر و کلاین‌فلتر؟",
-                        "back": "ترنر: ۴۵ کروموزوم (X تنها). کلاین‌فلتر: XXY."
-                    },
-                    {
-                        "id": "fc-6-19",
-                        "front": "تفاوت میتوز جانور و گیاه؟",
-                        "back": "جانوران سانتریول دارند و گیاهان ندارند؛ سیتوکینز نیز متفاوت است."
-                    },
-                    {
-                        "id": "fc-6-20",
-                        "front": "عوامل سرطان‌زا؟",
-                        "back": "پرتوها، مواد شیمیایی و برخی ویروس‌ها."
-                    },
-                    {
-                        "id": "fc-6-21",
-                        "front": "یاختهٔ بنیادی؟",
-                        "back": "یاخته‌ای که توانایی تقسیم و تمایز به انواع دیگر یاخته را دارد."
-                    },
-                    {
-                        "id": "fc-6-22",
-                        "front": "نتیجهٔ میتوز؟",
-                        "back": "دو یاخته همانند یکدیگر و همانند یاختهٔ اولیه؛ برای رشد و ترمیم."
-                    },
-                    {
-                        "id": "fc-6-23",
-                        "front": "آنافاز ۱ و ۲ میوز؟",
-                        "back": "در آنافاز ۱ کروموزوم‌های همتا و در آنافاز ۲ کروماتیدها جدا می‌شوند."
-                    },
-                    {
-                        "id": "fc-6-24",
-                        "front": "سانترومر؟",
-                        "back": "ناحیهٔ اتصال دو کروماتید و محل اتصال رشته‌های دوک."
-                    },
-                    {
-                        "id": "fc-6-25",
-                        "front": "میوز در کجاست؟",
-                        "back": "در جانوران در غدد جنسی انجام می‌شود."
-                    },
-                    {
-                        "id": "fc-6-26",
-                        "front": "رشته‌های دوک؟",
-                        "back": "از ریزلوله‌ها ساخته می‌شوند و حرکت کروموزوم‌ها را انجام می‌دهند."
-                    },
-                    {
-                        "id": "fc-6-27",
-                        "front": "کروموزوم‌های جنسی؟",
-                        "back": "در زن XX و در مرد XY."
-                    },
-                    {
-                        "id": "fc-6-28",
-                        "front": "کدام بافت‌ها تقسیم زیادی دارند؟",
-                        "back": "مثل پوست و مغز استخوان."
-                    },
-                    {
-                        "id": "fc-6-29",
-                        "front": "تقسیم در تک‌یاخته‌ای‌ها؟",
-                        "back": "معمولاً راهی برای تولیدمثل است."
-                    },
-                    {
-                        "id": "fc-6-30",
-                        "front": "یاخته‌های پیکری؟",
-                        "back": "همهٔ یاخته‌های بدن به جز جنسی؛ دیپلوئیدند."
-                    },
-                    {
-                        "id": "fc-6-31",
-                        "front": "کروماتین و کروموزوم؟",
-                        "back": "کروماتین در اینترفاز نازک است؛ در تقسیم فشرده می‌شود و کروموزوم نامیده می‌شود."
-                    },
-                    {
-                        "id": "fc-6-32",
-                        "front": "تومور خوش‌خیم و بدخیم؟",
-                        "back": "خوش‌خیم محدود می‌ماند؛ بدخیم به بافت‌های دیگر نفوذ و متاستاز می‌دهد."
-                    }
+                    { id: "fc-6-1", front: "مراحل چرخه یاخته‌ای؟", back: "اینترفاز (G1، S، G2) و تقسیم (M: میتوز و سیتوکینز)." },
+                    { id: "fc-6-2", front: "مراحل میتوز؟", back: "پروفاز، متافاز، آنافاز و تلوفاز." }
                 ]
             },
             {
@@ -2002,7 +1380,7 @@
                         title: "گفتار ۱: دستگاه تولیدمثل در مرد",
                         notes: [
                             { type: "concept", text: "بیضه‌ها درون کیسه بیضه و خارج از حفره شکمی قرار دارند (دمای حدود ۳ درجه کمتر از دمای بدن برای اسپرم‌زایی طبیعی ضروری است). در دیواره لوله‌های اسپرم‌ساز یاخته‌های زایگر و یاخته‌های پشتیبان (سرتولی) قرار دارند و در فضای بین لوله‌ها یاخته‌های بینابینی (تولیدکننده تستوسترون) واقع شده‌اند." },
-                            { type: "tip", text: "مراحل اسپرم‌زایی از دوران بلوغ آغاز می‌شود: اسپرماتوگونی (2n) با تقسیم میتوز به اسپرماتوسیت اولیه (2n) تبدیل می‌شود؛ اسپرماتوسیت اولیه با میوز ۱ دو اسپرماتوسیت ثانویه (n) و با میوز ۲ چهار اسپرماتید (n) می‌سازد که در تماس با یاخته‌های سرتولی به ۴ اسپرم تمایز می‌یابند." },
+                            { type: "tip", text: "نکته ترکیبی: مراحل اسپرم‌زایی از دوران بلوغ آغاز می‌شود: اسپرماتوگونی (2n) با تقسیم میتوز به اسپرماتوسیت اولیه (2n) تبدیل می‌شود؛ اسپرماتوسیت اولیه با میوز ۱ دو اسپرماتوسیت ثانویه (n) و با میوز ۲ چهار اسپرماتید (n) می‌سازد که در تماس با یاخته‌های سرتولی به ۴ اسپرم تمایز می‌یابند." },
                             { type: "concept", text: "غدد برون‌ریز ضمیمه دستگاه تولیدمثل مرد شامل وزیکول سمینال (ترشح مایع غنی از فروکتوز برای تأمین انرژی اسپرم‌ها)، غده پروستات (ترشح مایع شیری‌رنگ و قلیایی برای خنثی کردن محیط اسیدی واژن) و غدد پیازی-میزراهی (ترشح مایع قلیایی و روان‌کننده) هستند." },
                             { type: "trap", text: "دام تستی: در تنظیم هورمونی مرد، LH بر یاخته‌های بینابینی اثر کرده و ترشح تستوسترون را تحریک می‌کند؛ اما FSH به همراه تستوسترون بر یاخته‌های سرتولی اثر کرده و اسپرم‌زایی را تحریک می‌کند. تستوسترون بر هیپوتالاموس و هیپوفیز پیشین بازخورد منفی دارد." }
                         ]
@@ -2022,7 +1400,7 @@
                         title: "گفتار ۳: رشد و نمو جنین",
                         notes: [
                             { type: "concept", text: "لقاح معمولاً در بخش ابتدایی لوله فالوپ (لوله رحم) رخ می‌دهد. یاخته تخم (زیگوت) ضمن حرکت به سمت رحم تقسیمات میتوز متوالی انجام داده و در حدود روز ۵ تا ۶ به بلاستوسیست تبدیل می‌شود که شامل توده یاخته‌ای درونی (سازنده رویان) و لایه بیرونی تروفوبلاست (سازنده کوریون و بخش جنینی جفت) است." },
-                            { type: "tip", text: "تروفوبلاست با ترشح آنزیم‌های هضم‌کننده در دیواره رحم نفوذ کرده (جایگزینی/لانه‌گزینی) و هورمون HCG ترشح می‌کند که با حفظ جسم زرد از ریزش دیواره رحم جلوگیری می‌کند (مبنای تست بارداری)." },
+                            { type: "tip", text: "نکته ترکیبی: تروفوبلاست با ترشح آنزیم‌های هضم‌کننده در دیواره رحم نفوذ کرده (جایگزینی/لانه‌گزینی) و هورمون HCG ترشح می‌کند که با حفظ جسم زرد از ریزش دیواره رحم جلوگیری می‌کند (مبنای تست بارداری)." },
                             { type: "concept", text: "پرده‌های محافظتی اطراف جنین شامل آمنیون (حاوی مایع آمنیوتیک به عنوان ضربه‌گیر و تنظیم‌کننده دما)، کوریون (بیرونی‌ترین پرده و سازنده جفت)، کیسه زرده (نخستین محل خون‌سازی در جنین) و آلانتوئیس (مشارکت در تشکیل رگ‌های بند ناف) هستند." },
                             { type: "trap", text: "دام تستی: در جفت، خون مادر و خون جنین با هم مخلوط نمی‌شوند! تبادل مواد غذایی، اکسیژن و دفع مواد زائد از طریق انتشار، انتقال فعال و درون‌بری در پرزهای کوریونی انجام می‌شود. بند ناف دارای دو سرخرگ (خون تیره جنین به جفت) و یک سیاهرگ (خون روشن از جفت به جنین) است." }
                         ]
@@ -2032,9 +1410,9 @@
                         title: "گفتار ۴: تولیدمثل در جانوران",
                         notes: [
                             { type: "concept", text: "لقاح در جانوران به دو صورت خارجی (در آبزیانی مانند ماهی‌ها و دوزیستان با تولید تعداد بسیار زیاد گامت و هم‌زمانی آزادسازی گامت‌ها) و داخلی (در خشکی‌زیان و برخی آبزیان مانند کوسه‌ها و پستانداران دریایی) انجام می‌شود." },
-                            { type: "tip", text: "بکرزایی نوعی تولیدمثل جنسی است که در آن فرد جدید از رشد و نمو تخمک لقاح‌نیافته به وجود می‌آید؛ مانند زنبور عسل (تخمک‌های لقاح‌نیافته n به زنبور نر تبدیل می‌شوند و تخم‌های لقاح‌یافته 2n به زنبور ماده/ملکه یا کارگر تبدیل می‌شوند) و برخی مارها." },
+                            { type: "tip", text: "نکته ترکیبی: بکرزایی نوعی تولیدمثل جنسی است که در آن فرد جدید از رشد و نمو تخمک لقاح‌نیافته به وجود می‌آید؛ مانند زنبور عسل (تخمک‌های لقاح‌نیافته n به زنبور نر تبدیل می‌شوند و تخم‌های لقاح‌یافته 2n به زنبور ماده/ملکه یا کارگر تبدیل می‌شوند)." },
                             { type: "concept", text: "جانوران دارای لقاح داخلی بر اساس محل رشد جنین به سه گروه تقسیم می‌شوند: ۱) تخم‌گذار (پرندگان، خزندگان، پلاتی‌پوس)، ۲) تخم‌زنده‌زا (تخم درون بدن مادر می‌ماند و از اندوخته زرده تغذیه می‌کند مانند برخی کوسه‌ها و افعی‌ها) و ۳) زنده‌زا (جنین درون رحم مادر رشد می‌کند)." },
-                            { type: "trap", text: "دام تستی: در پستانداران کیسه‌دار (مثل کانگورو) جفت به طور کامل تشکیل نمی‌شود و نوزاد نارس به دنیا آمده و ادامه نمو را درون کیسه مادر با تغذیه از شیر طی می‌کند؛ اما در پستانداران جفت‌دار ارتباط خونی غیرمستقیم و تغذیه کامل جنین از طریق جفت انجام می‌شود." }
+                            { type: "trap", text: "دام تستی: در پستانداران کیسه‌دار (مثل کانگورو) جفت به طور کامل تشکیل نمی‌شود و نوزاد نارس به دنیا آمده و ادامه نمو را درون کیسه مادر با تغذیه از شیر طی می‌کند." }
                         ]
                     }
                 ],
@@ -2046,161 +1424,8 @@
                     { q: "در زنبور عسل، ملکه و زنبورهای کارگر از چه طریقی به وجود می‌آیند؟", options: ["بکرزایی از تخمک لقاح‌نیافته (n)", "لقاح گامت نر و ماده و تشکیل تخم دیپلوئید (2n)", "تقسیم میتوز زنبور نر", "تولیدمثل غیرجنسی جوانه‌زنی"], answer: 1, exp: "در زنبور عسل، تخم‌های لقاح‌یافته دیپلوئید (2n) بسته به نوع تغذیه (ژله رویال) به ملکه یا کارگر تبدیل می‌شوند، اما زنبور نر (n) با بکرزایی ایجاد می‌شود." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-7-1",
-                        "front": "اسپرم‌سازی کجا انجام می‌شود؟",
-                        "back": "در لوله‌های زاینده بیضه؛ یاخته‌های سرتولی کمک می‌کنند و لیدیگ تستوسترون می‌سازند."
-                    },
-                    {
-                        "id": "fc-7-2",
-                        "front": "FSH و LH چه می‌کنند؟",
-                        "back": "تحریک رشد انبانک و تخمک‌گذاری (LH) و تولید هورمون‌های جنسی."
-                    },
-                    {
-                        "id": "fc-7-3",
-                        "front": "چرخه جنسی زن؟",
-                        "back": "حدود ۲۸ روز؛ قاعدگی، فولیکولی، تخمک‌گذاری (حدود روز ۱۴) و لوتئال."
-                    },
-                    {
-                        "id": "fc-7-4",
-                        "front": "لقاح و لانه‌گزینی؟",
-                        "back": "لقاح در لولهٔ فالوپ، سپس رویان در رحم لانه‌گزینی می‌کند."
-                    },
-                    {
-                        "id": "fc-7-5",
-                        "front": "نقش جفت؟",
-                        "back": "تبادل مواد، ترشح هورمون‌ها و HCG که جسم زرد را حفظ می‌کند."
-                    },
-                    {
-                        "id": "fc-7-6",
-                        "front": "مسیر اسپرم تا بیرون؟",
-                        "back": "بیضه ← اپی‌دیدیم ← اسپرمبر ← مجرای انزالی ← میزراه."
-                    },
-                    {
-                        "id": "fc-7-7",
-                        "front": "بخش‌های اسپرم؟",
-                        "back": "سر (هسته و آکروزوم)، قطعهٔ میانی (راکیزه) و دم (تاژک)."
-                    },
-                    {
-                        "id": "fc-7-8",
-                        "front": "جسم زرد؟",
-                        "back": "بقایای انبانک پس از تخمک‌گذاری؛ پروژسترون و استروژن می‌سازد."
-                    },
-                    {
-                        "id": "fc-7-9",
-                        "front": "مراحل اولیهٔ رویان؟",
-                        "back": "تقسیم تخم، تشکیل مورولا و بلاستولا، سپس لانه‌گزینی در رحم."
-                    },
-                    {
-                        "id": "fc-7-10",
-                        "front": "تستوسترون؟",
-                        "back": "از یاخته‌های بینابینی (لیدیگ) و با اثر LH ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-7-11",
-                        "front": "قاعدگی؟",
-                        "back": "ریزش دیواره رحم با کاهش هورمون‌های جنسی."
-                    },
-                    {
-                        "id": "fc-7-12",
-                        "front": "پروژسترون؟",
-                        "back": "دیواره رحم را برای بارداری آماده نگه می‌دارد."
-                    },
-                    {
-                        "id": "fc-7-13",
-                        "front": "IVF؟",
-                        "back": "لقاح خارج از بدن و انتقال رویان به رحم."
-                    },
-                    {
-                        "id": "fc-7-14",
-                        "front": "پروستات و کیسه‌های منی؟",
-                        "back": "مایع منی را ترشح می‌کنند و محیط مناسب اسپرم می‌سازند."
-                    },
-                    {
-                        "id": "fc-7-15",
-                        "front": "تخمک‌گذاری؟",
-                        "back": "افزایش ناگهانی LH، تخمک را از انبانک آزاد می‌کند."
-                    },
-                    {
-                        "id": "fc-7-16",
-                        "front": "بند ناف؟",
-                        "back": "رگ‌هایی که جنین را به جفت وصل می‌کنند."
-                    },
-                    {
-                        "id": "fc-7-17",
-                        "front": "حاصل اسپرم‌سازی و تخمک‌زایی؟",
-                        "back": "از هر یاختهٔ اولیهٔ اسپرم‌ساز چهار اسپرم و از تخمک‌زایی یک تخمک و گویچه‌های قطبی ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-7-18",
-                        "front": "دوقلوها؟",
-                        "back": "همسان: از یک تخم که دو نیم می‌شود. ناهمسان: از دو تخمک و دو اسپرم جداگانه."
-                    },
-                    {
-                        "id": "fc-7-19",
-                        "front": "چرا بیضه در کیسه بیضه است؟",
-                        "back": "دمای آن کمی پایین‌تر از بدن است که برای اسپرم‌سازی مناسب است."
-                    },
-                    {
-                        "id": "fc-7-20",
-                        "front": "نقش تخمدان؟",
-                        "back": "ساخت تخمک و ترشح هورمون‌های جنسی ماده."
-                    },
-                    {
-                        "id": "fc-7-21",
-                        "front": "روش‌های پیشگیری از بارداری؟",
-                        "back": "مانع‌های مکانیکی، هورمونی و جراحی مثل وازکتومی."
-                    },
-                    {
-                        "id": "fc-7-22",
-                        "front": "رویان و جنین؟",
-                        "back": "از لقاح تا حدود ۸ هفته رویان، سپس جنین."
-                    },
-                    {
-                        "id": "fc-7-23",
-                        "front": "تعداد کروموزوم اسپرم؟",
-                        "back": "۲۳ کروموزوم هاپلوئید."
-                    },
-                    {
-                        "id": "fc-7-24",
-                        "front": "انتخاب لانه‌گزینی چه موقعی است؟",
-                        "back": "حدود یک هفته پس از لقاح."
-                    },
-                    {
-                        "id": "fc-7-25",
-                        "front": "مایع آمنیوتیک؟",
-                        "back": "مایع اطراف جنین که از آن محافظت می‌کند."
-                    },
-                    {
-                        "id": "fc-7-26",
-                        "front": "مقایسهٔ اسپرم و تخمک؟",
-                        "back": "تخمک بزرگ‌تر است و ذخیره غذایی دارد؛ اسپرم کوچک و متحرک است."
-                    },
-                    {
-                        "id": "fc-7-27",
-                        "front": "هورمون HCG چه کاری می‌کند؟",
-                        "back": "از رویان ترشح می‌شود؛ جسم زرد را حفظ می‌کند."
-                    },
-                    {
-                        "id": "fc-7-28",
-                        "front": "آندومتر چیست؟",
-                        "back": "لایهٔ درونی رحم که رویان در آن لانه می‌کند."
-                    },
-                    {
-                        "id": "fc-7-29",
-                        "front": "آکروزوم چه می‌کند؟",
-                        "back": "آنزیم‌هایی برای نفوذ اسپرم به تخمک دارد."
-                    },
-                    {
-                        "id": "fc-7-30",
-                        "front": "استروژن چه می‌کند؟",
-                        "back": "صفات جنسی ثانوی زنانه و ضخیم‌شدن آندومتر."
-                    },
-                    {
-                        "id": "fc-7-31",
-                        "front": "چند اسپرم وارد تخمک می‌شود؟",
-                        "back": "فقط یک اسپرم با تخمک ادغام می‌شود."
-                    }
+                    { id: "fc-7-1", front: "اسپرم‌سازی کجا انجام می‌شود؟", back: "در لوله‌های زاینده بیضه؛ یاخته‌های سرتولی کمک می‌کنند و لیدیگ تستوسترون می‌سازند." },
+                    { id: "fc-7-2", front: "FSH و LH چه می‌کنند؟", back: "تحریک رشد انبانک و تخمک‌گذاری (LH) و تولید هورمون‌های جنسی." }
                 ]
             },
             {
@@ -2216,7 +1441,7 @@
                         title: "گفتار ۱: گل",
                         notes: [
                             { type: "concept", text: "گل کامل دارای چهار حلقه کاسبرگ، گلبرگ، پرچم (میله و بساک) و مادگی (کلاله، خامه و تخمدان) است. در گرده‌افشانی، دانه گرده از بساک به کلاله منتقل می‌شود." },
-                            { type: "tip", text: "در بساک، یاخته مادر دانه گرده (2n) با میوز چهار میکروسپور (n) می‌سازد و هر میکروسپور با میتوز به دانه گرده نارس دویاخته‌ای (یاخته رویشی n و یاخته زایشی n) تبدیل می‌شود." }
+                            { type: "tip", text: "نکته ترکیبی: در بساک، یاخته مادر دانه گرده (2n) با میوز چهار میکروسپور (n) می‌سازد و هر میکروسپور با میتوز به دانه گرده نارس دویاخته‌ای (یاخته رویشی n و یاخته زایشی n) تبدیل می‌شود." }
                         ]
                     },
                     {
@@ -2244,166 +1469,8 @@
                     { q: "کیسه رویانی بالغ در نهاندانگان شامل چند یاخته و چند هسته است؟", options: ["۷ یاخته و ۷ هسته", "۷ یاخته و ۸ هسته", "۸ یاخته و ۸ هسته", "۶ یاخته و ۸ هسته"], answer: 1, exp: "کیسه رویانی بالغ دارای ۷ یاخته است که یاخته مرکزی آن دو هسته‌ای است (مجموعاً ۸ هسته هاپلوئید)." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-8-1",
-                        "front": "بخش‌های گل؟",
-                        "back": "کاسبرگ، گلبرگ، پرچم (بساک و میله) و مادگی (کلاله، خامه و تخمدان)."
-                    },
-                    {
-                        "id": "fc-8-2",
-                        "front": "لقاح مضاعف؟",
-                        "back": "یک اسپرم با تخمزا زیگوت 2n و دیگری با یاختهٔ دوهسته‌ای آندوسپرم 3n می‌سازد."
-                    },
-                    {
-                        "id": "fc-8-3",
-                        "front": "دانه گرده و کیسه رویانی؟",
-                        "back": "دانه گرده: دو یاخته (رویشی و زایشی). کیسه رویانی: ۷ یاخته و ۸ هسته."
-                    },
-                    {
-                        "id": "fc-8-4",
-                        "front": "میوه حقیقی و کاذب؟",
-                        "back": "حقیقی: فقط از تخمدان. کاذب: بخش‌های دیگر گل نیز دخالت دارند."
-                    },
-                    {
-                        "id": "fc-8-5",
-                        "front": "تولیدمثل غیرجنسی گیاهان؟",
-                        "back": "رویشی: ساقه خزنده، غده، پیاز و قلمه؛ والد با فرزند همانند است."
-                    },
-                    {
-                        "id": "fc-8-6",
-                        "front": "گرده‌افشانی؟",
-                        "back": "رسیدن دانهٔ گرده به کلالهٔ مادگی؛ با باد، آب یا جانوران."
-                    },
-                    {
-                        "id": "fc-8-7",
-                        "front": "دانه از چه تشکیل شده؟",
-                        "back": "رویان، ذخیرهٔ غذایی (آندوسپرم یا لپه) و پوسته؛ حاصل تخمک بارورشده."
-                    },
-                    {
-                        "id": "fc-8-8",
-                        "front": "جوانه‌زنی؟",
-                        "back": "با جذب آب رویان بیدار می‌شود؛ ابتدا ریشه‌چه و سپس ساقه‌چه رشد می‌کند."
-                    },
-                    {
-                        "id": "fc-8-9",
-                        "front": "گامتوفیت نر و ماده در نهاندانگان؟",
-                        "back": "نر: دانهٔ گردهٔ رسیده. ماده: کیسهٔ رویانی."
-                    },
-                    {
-                        "id": "fc-8-10",
-                        "front": "لولهٔ گرده؟",
-                        "back": "از دانهٔ گرده رشد می‌کند و اسپرم‌ها را به تخمک می‌رساند."
-                    },
-                    {
-                        "id": "fc-8-11",
-                        "front": "تخمک گیاه؟",
-                        "back": "درون تخمدان است و یاختهٔ مادر کیسه رویانی دارد."
-                    },
-                    {
-                        "id": "fc-8-12",
-                        "front": "پارتنوکارپی؟",
-                        "back": "رشد میوه بدون لقاح (میوهٔ بدون دانه)."
-                    },
-                    {
-                        "id": "fc-8-13",
-                        "front": "میوز در بساک؟",
-                        "back": "یاخته‌های مادر دانه گرده با میوز دانه‌های گرده نابالغ می‌سازند."
-                    },
-                    {
-                        "id": "fc-8-14",
-                        "front": "گل کامل؟",
-                        "back": "دارای چهار حلقه: کاسبرگ، گلبرگ، پرچم و مادگی."
-                    },
-                    {
-                        "id": "fc-8-15",
-                        "front": "گل نر و ماده؟",
-                        "back": "نر: فقط پرچم. ماده: فقط مادگی. دوجنسی: هر دو."
-                    },
-                    {
-                        "id": "fc-8-16",
-                        "front": "سرنوشت تخمدان و تخمک؟",
-                        "back": "تخمدان به میوه و تخمک به دانه تبدیل می‌شود."
-                    },
-                    {
-                        "id": "fc-8-17",
-                        "front": "پوسته دانه؟",
-                        "back": "از پوستهٔ تخمک ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-8-18",
-                        "front": "نقش آندوسپرم؟",
-                        "back": "تغذیهٔ رویان در جوانه‌زنی دانه."
-                    },
-                    {
-                        "id": "fc-8-19",
-                        "front": "گرده‌افشانی جانوری؟",
-                        "back": "گل‌های رنگی و دارای شهد جانوران را جذب می‌کنند و گرده را منتقل می‌شود."
-                    },
-                    {
-                        "id": "fc-8-20",
-                        "front": "تولیدمثل رویشی با غده؟",
-                        "back": "مثل سیب‌زمینی؛ از ساقهٔ زیرزمینی غده‌دار، گیاه جدید و همانند والد رشد می‌کند."
-                    },
-                    {
-                        "id": "fc-8-21",
-                        "front": "کشت بافت چه کاربردی دارد؟",
-                        "back": "تولید گیاهان سالم و همانند در زمان کوتاه."
-                    },
-                    {
-                        "id": "fc-8-22",
-                        "front": "پراکندگی دانه؟",
-                        "back": "با باد، آب یا جانوران انجام می‌شود."
-                    },
-                    {
-                        "id": "fc-8-23",
-                        "front": "قلمه و اکسین؟",
-                        "back": "اکسین ریشه‌زایی را در قلمه تسریع می‌کند."
-                    },
-                    {
-                        "id": "fc-8-24",
-                        "front": "کیسهٔ رویانی چگونه ساخته می‌شود؟",
-                        "back": "از یک یاختهٔ مادر میوز و سه میتوز پیاپی."
-                    },
-                    {
-                        "id": "fc-8-25",
-                        "front": "اسپوروفیت؟",
-                        "back": "گیاه دیپلوئید اصلی که هاگ هاپلوئید می‌سازد."
-                    },
-                    {
-                        "id": "fc-8-26",
-                        "front": "کاسبرگ و گلبرگ؟",
-                        "back": "بخش‌های غیرزایشی گل که از آن محافظت می‌کنند و جانور را جذب می‌کنند."
-                    },
-                    {
-                        "id": "fc-8-27",
-                        "front": "نقش بساک؟",
-                        "back": "دانهٔ گرده در آن ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-8-28",
-                        "front": "اجزای رویان در دانه؟",
-                        "back": "ریشه‌چه، ساقه‌چه و لپه."
-                    },
-                    {
-                        "id": "fc-8-29",
-                        "front": "خودگرده‌افشانی و دگرگرده‌افشانی؟",
-                        "back": "در خودگرده‌افشانی گرده به کلالهٔ همان گل می‌رسد؛ در دگرگرده‌افشانی به گل گیاه دیگر."
-                    },
-                    {
-                        "id": "fc-8-30",
-                        "front": "میوه کاذب مثال؟",
-                        "back": "سیب؛ بخش خوردنی آن از نیمهٔ پایهٔ گل ساخته می‌شود."
-                    },
-                    {
-                        "id": "fc-8-31",
-                        "front": "نهاندانگان یعنی چه؟",
-                        "back": "گیاهان گلدار که دانه‌شان درون میوه قرار دارد."
-                    },
-                    {
-                        "id": "fc-8-32",
-                        "front": "یاخته‌های کیسهٔ رویانی؟",
-                        "back": "یک تخمزا، دو هم‌یار، سه پادپا و یک یاختهٔ دوهسته‌ای."
-                    }
+                    { id: "fc-8-1", front: "بخش‌های گل؟", back: "کاسبرگ، گلبرگ، پرچم (بساک و میله) و مادگی (کلاله، خامه و تخمدان)." },
+                    { id: "fc-8-2", front: "لقاح مضاعف؟", back: "یک اسپرم با تخمزا زیگوت 2n و دیگری با یاختهٔ دوهسته‌ای آندوسپرم 3n می‌سازد." }
                 ]
             },
             {
@@ -2419,7 +1486,7 @@
                         title: "گفتار ۱: تنظیم‌کننده‌های رشد در گیاهان",
                         notes: [
                             { type: "concept", text: "محرک‌های رشد گیاهی شامل اکسین (افزایش طول یاخته‌ها، چیرگی رأسی و ریشه‌زایی قلمه‌ها)، جیبرلین (رشد طولی ساقه، شکستن خفتگی دانه و درشت کردن میوه‌های بدون دانه) و سیتوکینین (تحریک تقسیم یاخته‌ای و به تأخیر انداختن پیری برگ‌ها) هستند." },
-                            { type: "tip", text: "بازدارنده‌های رشد شامل آبسیزیک اسید (هورمون تنش خشکی، بستن روزنه‌ها و حفظ خفتگی دانه و جوانه) و اتیلن (تنها هورمون گازی، تسریع رسیدن میوه‌ها و ریزش برگ و میوه) هستند." },
+                            { type: "tip", text: "نکته ترکیبی: بازدارنده‌های رشد شامل آبسیزیک اسید (هورمون تنش خشکی، بستن روزنه‌ها و حفظ خفتگی دانه و جوانه) و اتیلن (تنها هورمون گازی، تسریع رسیدن میوه‌ها و ریزش برگ و میوه) هستند." },
                             { type: "trap", text: "دام تستی: در نورگرایی مثبت ساقه، اکسین در سمت سایه (پشت به نور) تجمع بیشتری می‌یابد و با اسیدی کردن دیواره یاخته‌ای باعث طویل شدن بیشتر یاخته‌های سمت سایه و خم شدن ساقه به سمت نور می‌شود." }
                         ]
                     },
@@ -2439,161 +1506,8 @@
                     { q: "کدام هورمون گیاهی به صورت گاز بوده و در رسیدن میوه‌های نارس نقش کلیدی دارد؟", options: ["اتیلن", "جیبرلین", "سیتوکینین", "آبسیزیک اسید"], answer: 0, exp: "اتیلن تنها تنظیم‌کننده رشد گازی است که رسیدن میوه‌ها و پیری و ریزش برگ‌ها را تحریک می‌کند." }
                 ],
                 flashcards: [
-                    {
-                        "id": "fc-9-1",
-                        "front": "اکسین چه می‌کند؟",
-                        "back": "طویل‌شدن یاخته‌ها، نورگرایی، غلبه رأسی و تشکیل ریشه."
-                    },
-                    {
-                        "id": "fc-9-2",
-                        "front": "جیبرلین؟",
-                        "back": "طویل‌شدن ساقه، جوانه‌زنی دانه و رشد میوه."
-                    },
-                    {
-                        "id": "fc-9-3",
-                        "front": "سیتوکینین؟",
-                        "back": "تقسیم یاخته، رشد جوانه جانبی و تأخیر در پیری."
-                    },
-                    {
-                        "id": "fc-9-4",
-                        "front": "اتیلن و آبسیزیک‌اسید؟",
-                        "back": "اتیلن: رسیدن میوه و ریزش برگ. آبسیزیک‌اسید: بسته‌شدن روزنه و خواب دانه."
-                    },
-                    {
-                        "id": "fc-9-5",
-                        "front": "تروپیسم و نستی؟",
-                        "back": "تروپیسم: خمش وابسته به جهت محرک (نور، گرانش). نستی: مستقل از جهت."
-                    },
-                    {
-                        "id": "fc-9-6",
-                        "front": "غالبیت رأسی؟",
-                        "back": "اکسین جوانهٔ انتهایی مانع رشد جوانه‌های جانبی می‌شود؛ سیتوکینین اثر مخالف دارد."
-                    },
-                    {
-                        "id": "fc-9-7",
-                        "front": "گرانشگرایی ریشه و ساقه؟",
-                        "back": "ریشه: مثبت. ساقه: منفی."
-                    },
-                    {
-                        "id": "fc-9-8",
-                        "front": "فتوپریودیسم؟",
-                        "back": "پاسخ گل‌دهی به طول شب و روز؛ گیاهان روزبلند، شب‌بلند و بی‌تفاوت."
-                    },
-                    {
-                        "id": "fc-9-9",
-                        "front": "هورمون‌های مؤثر بر پیری؟",
-                        "back": "اتیلن و آبسیزیک‌اسید پیری را تسریع و سیتوکینین آن را به تأخیر می‌اندازد."
-                    },
-                    {
-                        "id": "fc-9-10",
-                        "front": "نورگرایی ساقه؟",
-                        "back": "اکسین در سمت تاریک بیشتر می‌شود و ساقه به سوی نور خم می‌شود."
-                    },
-                    {
-                        "id": "fc-9-11",
-                        "front": "آب‌گرایی؟",
-                        "back": "رشد ریشه به سوی آب."
-                    },
-                    {
-                        "id": "fc-9-12",
-                        "front": "لمس‌گرایی؟",
-                        "back": "رشد پیچک دور تکیه‌گاه."
-                    },
-                    {
-                        "id": "fc-9-13",
-                        "front": "اکسین و ریشه؟",
-                        "back": "غلظت کم اکسین ریشه‌زایی را تحریک می‌کند، غلظت زیاد مهار."
-                    },
-                    {
-                        "id": "fc-9-14",
-                        "front": "فیتوکروم؟",
-                        "back": "رنگدانهٔ گیرندهٔ نور که در جوانه‌زنی و گل‌دهی نقش دارد."
-                    },
-                    {
-                        "id": "fc-9-15",
-                        "front": "بهاره‌سازی؟",
-                        "back": "نیاز برخی گیاهان به سرمای زمستان برای گل‌دهی."
-                    },
-                    {
-                        "id": "fc-9-16",
-                        "front": "دفاع در برابر گیاه‌خواران؟",
-                        "back": "کرک، ترکیبات سمی و بوهایی که دشمنان طبیعی گیاه‌خوار را جذب می‌کنند."
-                    },
-                    {
-                        "id": "fc-9-17",
-                        "front": "تنش‌های محیطی؟",
-                        "back": "خشکی، شوری، سرما و گرما؛ گیاه با تغییر در رشد و سازوکارهای دفاعی پاسخ می‌دهد."
-                    },
-                    {
-                        "id": "fc-9-18",
-                        "front": "نسبت اکسین به سیتوکینین در کشت بافت؟",
-                        "back": "نسبت بالای اکسین ریشه‌زایی و نسبت بالای سیتوکینین ساقه‌زایی را تحریک می‌کند."
-                    },
-                    {
-                        "id": "fc-9-19",
-                        "front": "نستی در گیاه حساس؟",
-                        "back": "بسته‌شدن برگ‌های گیاه حساس با لمس، پاسخ نستی مستقل از جهت محرک است."
-                    },
-                    {
-                        "id": "fc-9-20",
-                        "front": "بازشدن روزنه؟",
-                        "back": "با ورود آب به یاخته‌های نگهبان و تورم آن‌ها انجام می‌شود."
-                    },
-                    {
-                        "id": "fc-9-21",
-                        "front": "برهم‌کنش هورمون‌های گیاهی؟",
-                        "back": "پاسخ گیاه نتیجهٔ همکاری چند هورمون است، نه یک هورمون."
-                    },
-                    {
-                        "id": "fc-9-22",
-                        "front": "برگ‌ریزی؟",
-                        "back": "با اتیلن تسریع می‌شود و اکسین آن را تأخیر می‌اندازد."
-                    },
-                    {
-                        "id": "fc-9-23",
-                        "front": "اتیلن چه نوع هورمونی است؟",
-                        "back": "هورمون گازی که در رسیدن میوه نقش دارد."
-                    },
-                    {
-                        "id": "fc-9-24",
-                        "front": "اکسین در میوه؟",
-                        "back": "به رشد میوه کمک می‌کند."
-                    },
-                    {
-                        "id": "fc-9-25",
-                        "front": "مقدار هورمون گیاهی؟",
-                        "back": "هورمون‌های گیاهی در مقدار بسیار کم اثر می‌کنند."
-                    },
-                    {
-                        "id": "fc-9-26",
-                        "front": "هورمون گیاهی چیست؟",
-                        "back": "پیک شیمیایی که در یک بخش ساخته می‌شود و بر بخش دیگر اثر می‌گذارد."
-                    },
-                    {
-                        "id": "fc-9-27",
-                        "front": "گیاه روزکوتاه؟",
-                        "back": "گیاهی که برای گل‌دهی به شب بلند نیاز دارد."
-                    },
-                    {
-                        "id": "fc-9-28",
-                        "front": "اکسین در کجا ساخته می‌شود؟",
-                        "back": "بیشتر در نوک ساقه و جوانه‌های انتهایی؛ از آنجا به بخش‌های دیگر می‌رود."
-                    },
-                    {
-                        "id": "fc-9-29",
-                        "front": "کمبود جیبرلین؟",
-                        "back": "می‌تواند باعث کوتاه‌شدن ساقه و تأخیر جوانه‌زنی شود."
-                    },
-                    {
-                        "id": "fc-9-30",
-                        "front": "خواب جوانه؟",
-                        "back": "آبسیزیک‌اسید رشد جوانه‌ها را مهار و آن‌ها را در خواب نگه می‌دارد."
-                    },
-                    {
-                        "id": "fc-9-31",
-                        "front": "اتیلن چگونه میوه‌ها را تحت تأثیر قرار می‌دهد؟",
-                        "back": "گاز اتیلن از یک میوه منتشر شده و رسیدن میوه‌های اطراف را تسریع می‌کند."
-                    }
+                    { id: "fc-9-1", front: "اکسین چه می‌کند؟", back: "طویل‌شدن یاخته‌ها، نورگرایی، غلبه رأسی و تشکیل ریشه." },
+                    { id: "fc-9-2", front: "جیبرلین؟", back: "طویل‌شدن ساقه، جوانه‌زنی دانه و رشد میوه." }
                 ]
             }
         ];
@@ -2602,52 +1516,51 @@
         // 2B. ADMIN CONFIGURATION & SEPARATE QUESTION POOLS
         // =====================================================================
         const ADMIN_TELEGRAM_IDS = ["8319612497", "119629458"];
-        const ADMIN_FALLBACK_PIN = "118319";
+        const ADMIN_FALLBACK_PIN = "6624";
         const CUSTOM_CONTENT_KEY = "biosolo11_custom_content_v1";
 
         let adminSessionUnlocked = false;
         let currentAdminTab = "users";
 
-        // Separate pools for Duel, Survival, Konkoor, plus per-chapter Boss Fight questions
         const ARENA_CUSTOM_POOLS = {
             duel: [],
             survival: [],
             konkoor: []
         };
 
-        // Initialize separate bossQuiz array on each chapter (cloned from quiz initially so boss & chapter quiz are independent)
         CHAPTERS_DATA.forEach(ch => {
             ch.bossQuiz = ch.quiz.map(q => ({ ...q, options: [...q.options] }));
         });
 
+        function applyCustomContentPayload(raw) {
+            if (!raw || typeof raw !== "object") return;
+            if (Array.isArray(raw.duel)) ARENA_CUSTOM_POOLS.duel = raw.duel;
+            if (Array.isArray(raw.survival)) ARENA_CUSTOM_POOLS.survival = raw.survival;
+            if (Array.isArray(raw.konkoor)) ARENA_CUSTOM_POOLS.konkoor = raw.konkoor;
+
+            if (raw.chapters && typeof raw.chapters === "object") {
+                CHAPTERS_DATA.forEach(ch => {
+                    const cData = raw.chapters[ch.id];
+                    if (!cData) return;
+                    if (Array.isArray(cData.quiz)) ch.quiz = cData.quiz;
+                    if (Array.isArray(cData.bossQuiz)) ch.bossQuiz = cData.bossQuiz;
+                    if (Array.isArray(cData.flashcards)) ch.flashcards = cData.flashcards;
+                    if (cData.goftars && typeof cData.goftars === "object") {
+                        ch.goftars.forEach(g => {
+                            if (Array.isArray(cData.goftars[g.id])) {
+                                g.notes = cData.goftars[g.id];
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
         function loadCustomAdminContent() {
             try {
                 const raw = JSON.parse(localStorage.getItem(CUSTOM_CONTENT_KEY));
-                if (!raw || typeof raw !== "object") return;
-
-                if (Array.isArray(raw.duel)) ARENA_CUSTOM_POOLS.duel = raw.duel;
-                if (Array.isArray(raw.survival)) ARENA_CUSTOM_POOLS.survival = raw.survival;
-                if (Array.isArray(raw.konkoor)) ARENA_CUSTOM_POOLS.konkoor = raw.konkoor;
-
-                if (raw.chapters && typeof raw.chapters === "object") {
-                    CHAPTERS_DATA.forEach(ch => {
-                        const cData = raw.chapters[ch.id];
-                        if (!cData) return;
-                        if (Array.isArray(cData.quiz)) ch.quiz = cData.quiz;
-                        if (Array.isArray(cData.bossQuiz)) ch.bossQuiz = cData.bossQuiz;
-                        if (Array.isArray(cData.flashcards)) ch.flashcards = cData.flashcards;
-                        if (cData.goftars && typeof cData.goftars === "object") {
-                            ch.goftars.forEach(g => {
-                                if (Array.isArray(cData.goftars[g.id])) {
-                                    g.notes = cData.goftars[g.id];
-                                }
-                            });
-                        }
-                    });
-                }
-            } catch (e) {
-                console.warn("Custom content load warning:", e);
-            }
+                applyCustomContentPayload(raw);
+            } catch (e) {}
         }
 
         function saveCustomAdminContent() {
@@ -2670,6 +1583,7 @@
                 };
             });
             localStorage.setItem(CUSTOM_CONTENT_KEY, JSON.stringify(payload));
+            pushCloudAdminContent(payload);
         }
 
         function getCurrentTelegramNumericId() {
@@ -2709,8 +1623,8 @@
             openDialog(
                 "🛡️ احراز هویت پنل مدیریت",
                 `<div class="space-y-2.5">
-                    <p class="text-xs text-slate-300 leading-relaxed">در تلگرام برای آیدی‌های مجاز (<b>8319612497</b> و <b>119629458</b>) پنل به‌صورت خودکار باز می‌شود. برای ورود از مرورگر، رمز ادمین را وارد کنید:</p>
-                    <input id="admin-pin-input" type="password" placeholder="رمز ورود ادمین (پیش‌فرض: 118319)" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-black text-center tracking-widest" />
+                    <p class="text-xs text-slate-300 leading-relaxed">برای ورود به پنل مدیریت، رمز عبور ادمین را وارد کنید:</p>
+                    <input id="admin-pin-input" type="password" inputmode="numeric" placeholder="رمز ورود ادمین را وارد کنید" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-black text-center tracking-widest" />
                 </div>`,
                 `<button onclick="closeDialog()" class="px-3.5 py-2 rounded-xl bg-slate-800 text-xs font-bold">انصراف</button>
                  <button onclick="verifyAdminPin()" class="px-4 py-2 rounded-xl bg-rose-600 text-white text-xs font-black">ورود به پنل 🔓</button>`
@@ -2731,12 +1645,13 @@
             }
         }
 
-        function launchAdminModal() {
+        async function launchAdminModal() {
             const tgId = getCurrentTelegramNumericId();
             const badge = document.getElementById("admin-active-badge");
             if (badge) {
-                badge.textContent = tgId ? `ادمین تلگرام: ${tgId}` : "حالت مدیر (مرورگر) ✓";
+                badge.textContent = tgId ? `ادمین تلگرام: ${tgId}` : "حالت مدیر ✓";
             }
+            await fetchCloudAdminContent();
             populateAdminSelectors();
             document.getElementById("admin-modal").classList.remove("hidden");
             switchAdminTab(currentAdminTab || "users");
@@ -2794,7 +1709,6 @@
             renderAdminNotesList();
         }
 
-        // --- Admin Tab 1: Users ---
         async function renderAdminUsersList() {
             const container = document.getElementById("admin-users-list");
             if (!container) return;
@@ -2907,11 +1821,11 @@
         async function syncAllAdminDataToCloud() {
             saveCustomAdminContent();
             await syncUserToCloud();
+            await fetchCloudAdminContent();
             playSound("win");
-            showToast("اطلاعات و بانک سوالات همگام‌سازی شدند ☁️", "emerald");
+            showToast("اطلاعات و بانک سوالات با فضای ابری همگام شدند ☁️", "emerald");
         }
 
-        // --- Admin Tab 2: Separate Question Pools ---
         function onAdminQuestionPoolChange() {
             const poolType = document.getElementById("adm-q-pool")?.value || "chapter_quiz";
             const chapWrap = document.getElementById("adm-q-chap-wrap");
@@ -2935,6 +1849,121 @@
                 return chap.bossQuiz;
             }
             return chap.quiz;
+        }
+
+                function openImageZoom(src) {
+            if (!src) return;
+            const modal = document.getElementById("image-zoom-modal");
+            const img = document.getElementById("image-zoom-target");
+            if (modal && img) {
+                img.src = src;
+                modal.classList.remove("hidden");
+            }
+        }
+
+        function closeImageZoom() {
+            const modal = document.getElementById("image-zoom-modal");
+            if (modal) modal.classList.add("hidden");
+        }
+
+        function renderQuestionImageBlock(qObj) {
+            if (!qObj || !qObj.image) return "";
+            const safeSrc = String(qObj.image).replace(/"/g, "&quot;");
+            return `
+                <div class="my-2.5">
+                    <div onclick="openImageZoom('${safeSrc}')" class="cursor-zoom-in relative group rounded-2xl overflow-hidden border border-slate-700/80 bg-slate-950/90 p-1.5">
+                        <img src="${safeSrc}" alt="تصویر سوال زیست‌شناسی" class="w-full max-h-56 object-contain rounded-xl mx-auto" loading="lazy" />
+                        <span class="absolute bottom-2 left-2 px-2 py-0.5 rounded-lg bg-black/75 text-white text-[10px] font-bold opacity-85 group-hover:opacity-100">🔍 بزرگ‌نمایی</span>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateAdminQuestionImagePreview() {
+            const url = (document.getElementById("adm-q-img")?.value || "").trim();
+            const wrap = document.getElementById("adm-q-img-preview-wrap");
+            const img = document.getElementById("adm-q-img-preview");
+            if (!wrap || !img) return;
+            if (url) {
+                img.src = url;
+                wrap.classList.remove("hidden");
+            } else {
+                img.src = "";
+                wrap.classList.add("hidden");
+            }
+        }
+
+        function clearAdminQuestionImage() {
+            const inp = document.getElementById("adm-q-img");
+            const fileInp = document.getElementById("adm-q-img-file");
+            if (inp) inp.value = "";
+            if (fileInp) fileInp.value = "";
+            updateAdminQuestionImagePreview();
+        }
+
+        async function handleAdminQuestionImageFile(event) {
+            const file = event.target?.files?.[0];
+            if (!file) return;
+            if (!file.type.startsWith("image/")) {
+                showToast("لطفاً فقط فایل تصویری انتخاب کنید.", "rose");
+                return;
+            }
+            showToast("در حال پردازش و آماده‌سازی تصویر...", "indigo");
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = async function() {
+                    const maxDim = 760;
+                    let w = img.width;
+                    let h = img.height;
+                    if (w > maxDim || h > maxDim) {
+                        if (w > h) {
+                            h = Math.round((h * maxDim) / w);
+                            w = maxDim;
+                        } else {
+                            w = Math.round((w * maxDim) / h);
+                            h = maxDim;
+                        }
+                    }
+                    const canvas = document.createElement("canvas");
+                    canvas.width = w;
+                    canvas.height = h;
+                    const ctx = canvas.getContext("2d");
+                    ctx.drawImage(img, 0, 0, w, h);
+
+                    // Try uploading to Supabase Storage bucket 'biology-images' first; fallback to compressed WebP/JPEG data URL
+                    let finalUrl = "";
+                    if (supabaseClient) {
+                        try {
+                            const blob = await new Promise(res => canvas.toBlob(res, "image/webp", 0.82));
+                            if (blob) {
+                                const fileName = `q_${Date.now()}_${Math.random().toString(36).slice(2, 6)}.webp`;
+                                const { error: upErr } = await supabaseClient.storage
+                                    .from("biology-images")
+                                    .upload(fileName, blob, { contentType: "image/webp", upsert: true });
+                                if (!upErr) {
+                                    const { data: pubData } = supabaseClient.storage.from("biology-images").getPublicUrl(fileName);
+                                    if (pubData && pubData.publicUrl) {
+                                        finalUrl = pubData.publicUrl;
+                                    }
+                                }
+                            }
+                        } catch (err) {}
+                    }
+
+                    if (!finalUrl) {
+                        finalUrl = canvas.toDataURL("image/jpeg", 0.78);
+                    }
+
+                    const inp = document.getElementById("adm-q-img");
+                    if (inp) inp.value = finalUrl;
+                    updateAdminQuestionImagePreview();
+                    playSound("correct");
+                    showToast("تصویر سوال آماده ثبت است ✓", "emerald");
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
         }
 
         function adminAddQuestion() {
@@ -2965,8 +1994,11 @@
                 arena_konkoor: "آزمون جامع کنکور"
             };
 
+            const qImg = (document.getElementById("adm-q-img")?.value || "").trim();
+
             const newQ = {
                 q: qText,
+                image: qImg || null,
                 options: opts,
                 answer: ans,
                 exp: exp,
@@ -2978,6 +2010,7 @@
             saveCustomAdminContent();
 
             document.getElementById("adm-q-text").value = "";
+            clearAdminQuestionImage();
             document.getElementById("adm-q-opt0").value = "";
             document.getElementById("adm-q-opt1").value = "";
             document.getElementById("adm-q-opt2").value = "";
@@ -2985,7 +2018,7 @@
             document.getElementById("adm-q-exp").value = "";
 
             playSound("win");
-            showToast(`سوال به بخش «${poolLabels[poolType]}» اضافه شد ✓`, "emerald");
+            showToast(`سوال به بخش «${poolLabels[poolType]}» اضافه و در ابر ذخیره شد ☁️`, "emerald");
             renderAdminQuestionsList();
         }
 
@@ -3013,16 +2046,17 @@
             if (!container) return;
 
             if (list.length === 0) {
-                container.innerHTML = `<div class="p-4 rounded-2xl bg-slate-900/70 text-center text-xs text-slate-400">هنوز سوال اختصاصی در این بخش ثبت نشده است (در صورت خالی بودن، از بانک ترکیبی استفاده می‌شود).</div>`;
+                container.innerHTML = `<div class="p-4 rounded-2xl bg-slate-900/70 text-center text-xs text-slate-400">هنوز سوال اختصاصی در این بخش ثبت نشده است.</div>`;
                 return;
             }
 
             container.innerHTML = list.map((item, idx) => `
-                <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
+                <div class="p-3.5 rounded-2xl bg-slate-900/90 border ${item.image ? 'border-indigo-500/35' : 'border-slate-800'} space-y-2">
                     <div class="flex items-start justify-between gap-2">
-                        <p class="text-xs font-black text-white leading-relaxed">${idx + 1}. ${item.q}</p>
+                        <p class="text-xs font-black text-white leading-relaxed">${idx + 1}. ${item.image ? '<span class="inline-block px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 text-[10px] ml-1">🖼️ تصویری</span>' : ''}${item.q}</p>
                         <button onclick="adminDeleteQuestion(${idx})" class="px-2.5 py-1 rounded-lg bg-rose-600/20 text-rose-400 hover:bg-rose-600 hover:text-white text-[10px] font-black shrink-0">حذف</button>
                     </div>
+                    ${item.image ? `<img src="${item.image}" alt="تصویر سوال" class="max-h-32 rounded-xl border border-slate-700 object-contain bg-slate-950" />` : ''}
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-1 text-[11px]">
                         ${item.options.map((op, oIdx) => `
                             <div class="px-2.5 py-1 rounded-lg ${oIdx === item.answer ? 'bg-emerald-500/20 text-emerald-300 font-black border border-emerald-500/30' : 'text-slate-400'}">
@@ -3034,7 +2068,6 @@
             `).join("");
         }
 
-        // --- Admin Tab 3: Notes ---
         function adminAddNote() {
             const chapId = Number(document.getElementById("adm-n-chap").value || 1);
             const goftarId = document.getElementById("adm-n-goftar").value;
@@ -3051,7 +2084,7 @@
             saveCustomAdminContent();
             document.getElementById("adm-n-text").value = "";
             playSound("win");
-            showToast("نکته به درسنامه اضافه شد ✓", "emerald");
+            showToast("نکته به درسنامه اضافه و در ابر ذخیره شد ☁️", "emerald");
             renderAdminNotesList();
         }
 
@@ -3082,7 +2115,6 @@
             `).join("");
         }
 
-        // --- Admin Tab 4: Flashcards ---
         function adminAddFlashcard() {
             const chapId = Number(document.getElementById("adm-fc-chap").value || 1);
             const front = document.getElementById("adm-fc-front").value.trim();
@@ -3102,7 +2134,7 @@
             document.getElementById("adm-fc-front").value = "";
             document.getElementById("adm-fc-back").value = "";
             playSound("win");
-            showToast("فلش‌کارت جدید اضافه شد ✓", "emerald");
+            showToast("فلش‌کارت جدید اضافه و در ابر ذخیره شد ☁️", "emerald");
             renderAdminFlashcardsList();
         }
 
@@ -3133,7 +2165,7 @@
         }
 
         // =====================================================================
-        // 3. STATE MANAGEMENT & AUDIO
+        // 3. STATE MANAGEMENT, DAILY QUESTS & ENHANCED AUDIO
         // =====================================================================
         const STORAGE_KEY = "biosolo11_state_v2";
         const USERS_DB_KEY = "biosolo11_local_users_v2";
@@ -3159,7 +2191,12 @@
             chapterQuizScores: {},
             totalAnswered: 0,
             totalCorrect: 0,
-            survivalBest: 0
+            survivalBest: 0,
+            dailyDate: new Date().toDateString(),
+            dailyGoftars: 0,
+            dailyCorrect: 0,
+            dailyArenaPlayed: 0,
+            dailyClaimed: []
         };
 
         let state = loadState();
@@ -3170,7 +2207,16 @@
             try {
                 const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
                 if (saved && typeof saved === "object") {
-                    return { ...DEFAULT_STATE, ...saved };
+                    const merged = { ...DEFAULT_STATE, ...saved };
+                    const today = new Date().toDateString();
+                    if (merged.dailyDate !== today) {
+                        merged.dailyDate = today;
+                        merged.dailyGoftars = 0;
+                        merged.dailyCorrect = 0;
+                        merged.dailyArenaPlayed = 0;
+                        merged.dailyClaimed = [];
+                    }
+                    return merged;
                 }
             } catch (e) {}
             return { ...DEFAULT_STATE };
@@ -3209,6 +2255,8 @@
                 if (!tg) return;
                 tg.ready();
                 tg.expand();
+                if (tg.setHeaderColor) tg.setHeaderColor("#070b14");
+                if (tg.setBackgroundColor) tg.setBackgroundColor("#070b14");
 
                 const tgUser = tg.initDataUnsafe && tg.initDataUnsafe.user;
                 if (tgUser && tgUser.id) {
@@ -3288,6 +2336,15 @@
                     gain.gain.exponentialRampToValueAtTime(0.001, now + 0.24);
                     osc.start(now);
                     osc.stop(now + 0.24);
+                } else if (type === "invite") {
+                    osc.type = "triangle";
+                    osc.frequency.setValueAtTime(587.33, now);
+                    osc.frequency.setValueAtTime(880, now + 0.12);
+                    osc.frequency.setValueAtTime(1174.66, now + 0.24);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+                    osc.start(now);
+                    osc.stop(now + 0.42);
                 } else if (type === "win") {
                     osc.type = "triangle";
                     osc.frequency.setValueAtTime(440, now);
@@ -3326,7 +2383,7 @@
                 el.style.transform = "translateY(-8px)";
                 el.style.transition = "all 0.25s ease";
                 setTimeout(() => el.remove(), 260);
-            }, 2400);
+            }, 2500);
         }
 
         function awardRewards(xpGain, coinGain, reason = "") {
@@ -3336,6 +2393,7 @@
             const newLevel = Math.floor(state.xp / 200) + 1;
             saveState();
             updateHUD();
+            renderDailyQuests();
             if (reason) {
                 showToast(`${reason} (+${xpGain} XP و +${coinGain} 🧬)`, "emerald");
             }
@@ -3351,6 +2409,76 @@
             if (xp >= 800) return { name: "طلا 🥇", color: "text-amber-400" };
             if (xp >= 300) return { name: "نقره 🥈", color: "text-slate-300" };
             return { name: "برنز 🥉", color: "text-amber-600" };
+        }
+
+        // --- DAILY QUESTS SYSTEM ---
+        function getDailyQuestsData() {
+            return [
+                {
+                    id: "q_goftar",
+                    title: "مطالعه ۱ گفتار",
+                    current: Math.min(1, state.dailyGoftars || 0),
+                    target: 1,
+                    xp: 40,
+                    coins: 10
+                },
+                {
+                    id: "q_tests",
+                    title: "۵ پاسخ تست صحیح",
+                    current: Math.min(5, state.dailyCorrect || 0),
+                    target: 5,
+                    xp: 60,
+                    coins: 15
+                },
+                {
+                    id: "q_arena",
+                    title: "۱ رقابت در آرنا",
+                    current: Math.min(1, state.dailyArenaPlayed || 0),
+                    target: 1,
+                    xp: 50,
+                    coins: 12
+                }
+            ];
+        }
+
+        function renderDailyQuests() {
+            const listEl = document.getElementById("daily-quests-list");
+            const summaryEl = document.getElementById("daily-quests-summary");
+            if (!listEl) return;
+            const quests = getDailyQuestsData();
+            const claimed = Array.isArray(state.dailyClaimed) ? state.dailyClaimed : [];
+            const doneCount = quests.filter(q => q.current >= q.target).length;
+            if (summaryEl) summaryEl.textContent = `${doneCount}/3 تکمیل`;
+
+            listEl.innerHTML = quests.map(q => {
+                const isDone = q.current >= q.target;
+                const isClaimed = claimed.includes(q.id);
+                return `
+                    <div class="p-3 rounded-2xl bg-slate-200/60 dark:bg-slate-900/90 border ${isClaimed ? "border-emerald-500/30 opacity-75" : isDone ? "border-amber-400/60" : "border-slate-800"} flex flex-col justify-between gap-2">
+                        <div class="flex items-center justify-between text-xs font-black">
+                            <span>${q.title}</span>
+                            <span class="text-[11px] text-amber-400">${q.current}/${q.target}</span>
+                        </div>
+                        ${isClaimed
+                            ? `<span class="text-center py-1.5 rounded-xl bg-emerald-500/15 text-emerald-400 text-[11px] font-black">دریافت شد ✓</span>`
+                            : isDone
+                                ? `<button onclick="claimDailyQuest('${q.id}')" class="w-full py-1.5 rounded-xl bg-gradient-to-l from-amber-500 to-emerald-600 text-white text-[11px] font-black shadow animate-pulse">دریافت +${q.xp} XP 🎁</button>`
+                                : `<div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden"><div class="h-full bg-amber-400" style="width:${Math.round((q.current / q.target) * 100)}%"></div></div>`
+                        }
+                    </div>
+                `;
+            }).join("");
+        }
+
+        function claimDailyQuest(questId) {
+            const quests = getDailyQuestsData();
+            const q = quests.find(item => item.id === questId);
+            if (!q || q.current < q.target) return;
+            if (!Array.isArray(state.dailyClaimed)) state.dailyClaimed = [];
+            if (state.dailyClaimed.includes(questId)) return;
+            state.dailyClaimed.push(questId);
+            playSound("win");
+            awardRewards(q.xp, q.coins, `جایزه مأموریت «${q.title}»!`);
         }
 
         // =====================================================================
@@ -3472,7 +2600,6 @@
             const fullName = `${fName} ${lName}`;
             const normalizedTarget = normalizePersianName(fullName);
 
-            // 1. Check local registry first to restore previous progress if the user already registered
             let matchedUser = null;
             try {
                 const reg = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || {};
@@ -3484,7 +2611,6 @@
                 }
             } catch (e) {}
 
-            // 2. If not found locally and supabaseClient is active, check cloud users
             if (!matchedUser && supabaseClient) {
                 try {
                     const { data, error } = await supabaseClient
@@ -3529,7 +2655,6 @@
                 return;
             }
 
-            // 3. New user registration
             state.firstName = fName;
             state.lastName = lName;
             state.username = fullName;
@@ -3562,25 +2687,27 @@
             });
 
             if (tabName === "map") renderMap();
+            if (tabName === "arena") fetchArenaChat();
             if (tabName === "leaderboard") renderLeaderboard();
             if (tabName === "shop") renderShop();
             if (tabName === "profile") renderProfile();
         }
 
         // =====================================================================
-        // 6. TAB 1: CHAPTER MAP & CHAPTER MODAL (NOTES / QUIZ / CARDS / BOSS)
+        // 6. TAB 1: CHAPTER MAP & CHAPTER MODAL
         // =====================================================================
         function renderMap() {
+            renderDailyQuests();
             const container = document.getElementById("chapters-path-container");
             const totalGoftars = CHAPTERS_DATA.reduce((sum, ch) => sum + ch.goftars.length, 0);
-            const totalMilestones = totalGoftars + CHAPTERS_DATA.length; // goftars + bosses
+            const totalMilestones = totalGoftars + CHAPTERS_DATA.length;
             const doneMilestones = state.completedGoftars.length + state.defeatedBosses.length;
             const totalPct = Math.min(100, Math.round((doneMilestones / totalMilestones) * 100));
 
             document.getElementById("map-total-percent").textContent = `${totalPct}%`;
             document.getElementById("map-total-bar").style.width = `${totalPct}%`;
 
-            container.innerHTML = CHAPTERS_DATA.map((chap, index) => {
+            container.innerHTML = CHAPTERS_DATA.map((chap) => {
                 const doneGoftarsCount = chap.goftars.filter(g => state.completedGoftars.includes(g.id)).length;
                 const bossDefeated = state.defeatedBosses.includes(chap.id);
                 const chapPct = Math.round(((doneGoftarsCount + (bossDefeated ? 1 : 0)) / (chap.goftars.length + 1)) * 100);
@@ -3668,7 +2795,6 @@
             if (subTab === "boss") initChapterBoss();
         }
 
-        // 6A. Chapter Notes (with distinct Goftars)
         function renderChapterNotes() {
             const chap = CHAPTERS_DATA.find(c => c.id === currentChapterId);
             const container = document.getElementById("chap-body-notes");
@@ -3722,12 +2848,12 @@
         function completeGoftar(goftarId) {
             if (state.completedGoftars.includes(goftarId)) return;
             state.completedGoftars.push(goftarId);
+            state.dailyGoftars = (state.dailyGoftars || 0) + 1;
             playSound("win");
             awardRewards(45, 12, "گفتار با موفقیت مطالعه شد!");
             renderChapterNotes();
         }
 
-        // 6B. Chapter Quiz
         let chapQuizIdx = 0;
         let chapQuizScore = 0;
         let chapQuizAnswered = false;
@@ -3775,6 +2901,7 @@
                         <span>امتیاز فعلی: ${chapQuizScore}</span>
                     </div>
                     <p class="text-sm sm:text-base font-black leading-relaxed">${qObj.q}</p>
+                    ${renderQuestionImageBlock(qObj)}
                     <div class="space-y-2.5" id="chap-quiz-options">
                         ${qObj.options.map((opt, idx) => `
                             <button onclick="answerChapterQuiz(${idx})" class="w-full text-right p-3.5 rounded-2xl bg-slate-200/70 dark:bg-slate-900 border border-slate-300/60 dark:border-slate-800 hover:border-emerald-500 text-xs sm:text-sm font-bold transition">
@@ -3801,6 +2928,7 @@
             if (chosenIdx === qObj.answer) {
                 chapQuizScore++;
                 state.totalCorrect++;
+                state.dailyCorrect = (state.dailyCorrect || 0) + 1;
                 playSound("correct");
                 buttons[chosenIdx].className = "w-full text-right p-3.5 rounded-2xl bg-emerald-500/20 border border-emerald-500 text-emerald-400 text-xs sm:text-sm font-black";
             } else {
@@ -3825,7 +2953,7 @@
         // 6C. Chapter 3D Flashcards
         let fcIndex = 0;
         let fcFlipped = false;
-        let fcFilter = "all"; // all | unmastered | mastered
+        let fcFilter = "all";
         let fcDeck = [];
 
         function getCardTypeLabel(frontText) {
@@ -3934,12 +3062,10 @@
 
                     <div onclick="flipFlashcard()" class="cursor-pointer perspective-1000 w-full h-56 sm:h-64">
                         <div id="fc-inner" class="relative w-full h-full transition-transform duration-500 transform-style-3d ${fcFlipped ? "rotate-y-180" : ""}">
-                            <!-- Front -->
                             <div class="absolute inset-0 backface-hidden rounded-3xl bg-gradient-to-br from-indigo-600/20 to-slate-900 border border-indigo-500/30 p-6 flex flex-col items-center justify-center text-center shadow-lg">
                                 <span class="text-[11px] font-black text-indigo-400 mb-3">❓ ${cardType} (برای دیدن پاسخ لمس کنید)</span>
                                 <p class="text-base sm:text-lg font-black leading-relaxed">${card.front}</p>
                             </div>
-                            <!-- Back -->
                             <div class="absolute inset-0 backface-hidden rotate-y-180 rounded-3xl bg-gradient-to-br from-emerald-600/25 to-slate-900 border border-emerald-500/40 p-6 flex flex-col items-center justify-center text-center shadow-lg overflow-y-auto">
                                 <span class="text-[11px] font-black text-emerald-400 mb-3">✅ پاسخ کلیدی کنکور</span>
                                 <p class="text-xs sm:text-sm font-bold leading-relaxed text-emerald-100">${card.back}</p>
@@ -4081,6 +3207,7 @@
                     </div>
 
                     <p class="text-sm sm:text-base font-black leading-relaxed">${qObj.q}</p>
+                    ${renderQuestionImageBlock(qObj)}
                     <div class="space-y-2.5" id="boss-options">
                         ${qObj.options.map((opt, idx) => `
                             <button onclick="answerBossFight(${idx})" class="w-full text-right p-3.5 rounded-2xl bg-slate-200/70 dark:bg-slate-900 border border-slate-300/60 dark:border-slate-800 hover:border-rose-500 text-xs sm:text-sm font-bold transition">
@@ -4101,6 +3228,7 @@
             state.totalAnswered++;
             if (chosenIdx === qObj.answer) {
                 state.totalCorrect++;
+                state.dailyCorrect = (state.dailyCorrect || 0) + 1;
                 playSound("correct");
                 buttons[chosenIdx].className = "w-full text-right p-3.5 rounded-2xl bg-emerald-500/25 border border-emerald-500 text-emerald-400 text-xs sm:text-sm font-black";
                 const dmg = Math.ceil(100 / bossQuestions.length);
@@ -4121,7 +3249,7 @@
         }
 
         // =====================================================================
-        // 7. TAB 2: ARENA MODE (DUEL / SURVIVAL / KONKOOR)
+        // 7. TAB 2: ARENA MODE (LIVE ONLINE DUEL / SURVIVAL / KONKOOR)
         // =====================================================================
         let arenaState = null;
         let duelTimerInterval = null;
@@ -4177,13 +3305,16 @@
             if (buttons[qObj.answer]) {
                 buttons[qObj.answer].className = "w-full text-right p-3.5 rounded-2xl bg-emerald-500/25 border border-emerald-500 text-emerald-400 text-xs sm:text-sm font-black";
             }
-            if (Math.random() < 0.65) {
+            if (!arenaState.isOnlineLive && Math.random() < 0.65) {
                 arenaState.rivalScore++;
             }
             saveState();
             setTimeout(() => {
                 arenaState.idx++;
                 arenaState.locked = false;
+                if (arenaState.isOnlineLive) {
+                    pushLiveDuelProgress();
+                }
                 renderArenaGameplay();
             }, 900);
         }
@@ -4237,27 +3368,28 @@
                 return;
             }
             openDialog(
-                "⚔️ انتخاب حریف از داوطلبان واقعی",
-                `<div class="space-y-2 max-h-60 overflow-y-auto custom-scrollbar">
-                    <button onclick="closeDialog(); startArenaMode('duel')" class="w-full flex items-center justify-between p-3 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 hover:bg-indigo-600/30 text-right transition">
-                        <span class="text-xs font-black text-indigo-300">🎲 انتخاب تصادفی از بین ${opponents.length} داوطلب</span>
-                        <span class="text-[11px] font-black text-indigo-400">شروع ←</span>
-                    </button>
+                "⚔️ دعوت به دوئل آنلاین همزمان",
+                `<div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar">
+                    <p class="text-[11px] text-indigo-300 font-bold mb-1">با انتخاب هر داوطلب، دعوت‌نامه آنلاین فوری روی صفحه او ظاهر می‌شود:</p>
                     ${opponents.map(op => `
-                        <button onclick="startDuelWithOpponent('${op.userId}')" class="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-emerald-500/50 text-right transition">
+                        <button onclick="sendOnlineDuelInvitation('${op.userId}')" class="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-900/90 border border-slate-800 hover:border-indigo-500/70 text-right transition">
                             <span class="flex items-center gap-2 min-w-0">
                                 <span class="text-xl">${op.avatar}</span>
                                 <span class="text-xs font-black text-white truncate">${op.username}</span>
                             </span>
-                            <span class="text-[11px] font-black text-emerald-400 shrink-0">${op.xp} XP</span>
+                            <span class="text-[11px] font-black text-indigo-400 shrink-0">ارسال دعوت ⚡</span>
                         </button>
                     `).join("")}
+                    <button onclick="closeDialog(); startArenaMode('duel')" class="w-full flex items-center justify-between p-3 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-emerald-500/40 text-right transition mt-2">
+                        <span class="text-xs font-black text-slate-300">🤖 تمرین سریع آفلاین (بدون انتظار)</span>
+                        <span class="text-[11px] font-black text-emerald-400">شروع ←</span>
+                    </button>
                 </div>`,
                 `<button onclick="closeDialog()" class="px-4 py-2 rounded-xl bg-slate-800 text-xs font-bold">بستن</button>`
             );
         }
 
-        function startDuelWithOpponent(targetUserId) {
+        async function sendOnlineDuelInvitation(targetUserId) {
             closeDialog();
             const opponents = getRealDuelOpponents();
             const found = opponents.find(o => o.userId === targetUserId);
@@ -4265,20 +3397,63 @@
                 startArenaMode("duel");
                 return;
             }
-            const pool = getModeSpecificQuestions("duel", 5);
+
+            const questions = getModeSpecificQuestions("duel", 5).slice(0, 5);
+            const duelId = `duel_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+
+            if (supabaseClient) {
+                try {
+                    await supabaseClient.from("biosolo11_duels").insert({
+                        id: duelId,
+                        challenger_id: state.userId,
+                        challenger_name: state.username,
+                        challenger_avatar: state.avatar,
+                        opponent_id: found.userId,
+                        opponent_name: found.username,
+                        opponent_avatar: found.avatar || "🧬",
+                        status: "pending",
+                        questions: questions,
+                        challenger_score: 0,
+                        challenger_progress: 0,
+                        opponent_score: 0,
+                        opponent_progress: 0,
+                        created_at: Date.now(),
+                        updated_at: Date.now()
+                    });
+                } catch (e) {}
+            }
+
+            playSound("invite");
+            showToast(`⚡ دعوت‌نامه آنلاین برای ${found.username} ارسال شد!`, "indigo");
+
+            activeOnlineDuel = {
+                id: duelId,
+                role: "challenger",
+                status: "pending",
+                rivalName: found.username,
+                rivalAvatar: found.avatar || "🧬",
+                rivalScore: 0,
+                rivalProgress: 0
+            };
+
             document.getElementById("arena-menu").classList.add("hidden");
             const gameplay = document.getElementById("arena-gameplay");
             gameplay.classList.remove("hidden");
+
             arenaState = {
                 mode: "duel",
+                isOnlineLive: true,
+                duelId: duelId,
+                role: "challenger",
                 rivalName: found.username,
                 rivalAvatar: found.avatar || "🧬",
                 rivalXp: Number(found.xp) || 0,
                 isRealPlayer: true,
-                questions: pool.slice(0, 5),
+                questions: questions,
                 idx: 0,
                 myScore: 0,
                 rivalScore: 0,
+                rivalProgress: 0,
                 locked: false
             };
             renderArenaGameplay();
@@ -4297,41 +3472,26 @@
 
         function startArenaMode(mode) {
             playSound("click");
+            activeOnlineDuel = null;
             document.getElementById("arena-menu").classList.add("hidden");
             const gameplay = document.getElementById("arena-gameplay");
             gameplay.classList.remove("hidden");
 
             if (mode === "duel") {
                 const duelPool = getModeSpecificQuestions("duel", 5);
-                const realPlayers = getRealDuelOpponents();
-                if (realPlayers.length > 0) {
-                    const selectedRival = realPlayers[Math.floor(Math.random() * realPlayers.length)];
-                    arenaState = {
-                        mode: "duel",
-                        rivalName: selectedRival.username,
-                        rivalAvatar: selectedRival.avatar || "🧬",
-                        rivalXp: Number(selectedRival.xp) || 0,
-                        isRealPlayer: true,
-                        questions: duelPool.slice(0, 5),
-                        idx: 0,
-                        myScore: 0,
-                        rivalScore: 0,
-                        locked: false
-                    };
-                } else {
-                    arenaState = {
-                        mode: "duel",
-                        rivalName: "ربات تمرینی زیست‌سولو",
-                        rivalAvatar: "🤖",
-                        rivalXp: 0,
-                        isRealPlayer: false,
-                        questions: duelPool.slice(0, 5),
-                        idx: 0,
-                        myScore: 0,
-                        rivalScore: 0,
-                        locked: false
-                    };
-                }
+                arenaState = {
+                    mode: "duel",
+                    isOnlineLive: false,
+                    rivalName: "ربات تمرینی زیست‌سولو",
+                    rivalAvatar: "🤖",
+                    rivalXp: 0,
+                    isRealPlayer: false,
+                    questions: duelPool.slice(0, 5),
+                    idx: 0,
+                    myScore: 0,
+                    rivalScore: 0,
+                    locked: false
+                };
             } else if (mode === "survival") {
                 const survivalPool = getModeSpecificQuestions("survival", 10);
                 arenaState = {
@@ -4343,7 +3503,6 @@
                     locked: false
                 };
             } else {
-                // Konkoor: prioritize dedicated konkoor questions, fallback to 1 question per chapter
                 const dedicatedKonkoor = Array.isArray(ARENA_CUSTOM_POOLS.konkoor) ? [...ARENA_CUSTOM_POOLS.konkoor].sort(() => Math.random() - 0.5) : [];
                 let nineQs = [];
                 if (dedicatedKonkoor.length >= 9) {
@@ -4370,6 +3529,7 @@
             clearDuelTimer();
             playSound("click");
             arenaState = null;
+            activeOnlineDuel = null;
             document.getElementById("arena-gameplay").classList.add("hidden");
             document.getElementById("arena-menu").classList.remove("hidden");
         }
@@ -4378,21 +3538,29 @@
             const container = document.getElementById("arena-gameplay");
             if (!arenaState) return;
 
-            // End conditions
             if (arenaState.mode === "duel" && arenaState.idx >= arenaState.questions.length) {
+                state.dailyArenaPlayed = (state.dailyArenaPlayed || 0) + 1;
                 const won = arenaState.myScore >= arenaState.rivalScore;
-                if (won) {
-                    playSound("win");
-                    awardRewards(160, 20, "پیروزی در دوئل ۱ به ۱!");
-                } else {
-                    playSound("wrong");
-                    awardRewards(40, 5, "پایان دوئل (امتیاز مشارکت)");
+                const waitingOpponent = arenaState.isOnlineLive && (arenaState.rivalProgress || 0) < arenaState.questions.length;
+
+                if (!arenaState.rewarded) {
+                    arenaState.rewarded = true;
+                    if (won) {
+                        playSound("win");
+                        awardRewards(160, 20, "پیروزی در دوئل ۱ به ۱!");
+                    } else {
+                        playSound("wrong");
+                        awardRewards(40, 5, "پایان دوئل (امتیاز مشارکت)");
+                    }
                 }
+
+                activeOnlineDuel = null;
                 container.innerHTML = `
                     <div class="text-center space-y-4 py-4 animate-pop">
                         <div class="text-5xl">${won ? "🏆" : "⚔️"}</div>
                         <h3 class="text-lg font-black ${won ? "text-emerald-400" : "text-amber-400"}">${won ? "برنده دوئل شدی!" : "رقابت نزدیک بود!"}</h3>
-                        <p class="text-xs font-bold text-slate-300">نتیجه: شما (${arenaState.myScore}) — ${arenaState.rivalName} (${arenaState.rivalScore})</p>
+                        <p class="text-xs font-bold text-slate-300">نتیجه شما: (${arenaState.myScore}) — ${arenaState.rivalName}: (${arenaState.rivalScore})</p>
+                        ${waitingOpponent ? `<p class="text-[11px] text-indigo-400 animate-pulse">⏳ حریف هنوز در حال پاسخ‌گویی است (پاسخ‌های حریف: ${arenaState.rivalProgress}/5)...</p>` : ""}
                         <button onclick="exitArena()" class="px-6 py-2.5 rounded-xl bg-indigo-600 text-white text-xs font-black">بازگشت به آرنا</button>
                     </div>
                 `;
@@ -4400,6 +3568,7 @@
             }
 
             if (arenaState.mode === "survival" && (arenaState.hearts <= 0 || arenaState.idx >= arenaState.questions.length)) {
+                state.dailyArenaPlayed = (state.dailyArenaPlayed || 0) + 1;
                 if (arenaState.streakCount > state.survivalBest) {
                     state.survivalBest = arenaState.streakCount;
                 }
@@ -4419,6 +3588,7 @@
             }
 
             if (arenaState.mode === "konkoor" && arenaState.idx >= arenaState.questions.length) {
+                state.dailyArenaPlayed = (state.dailyArenaPlayed || 0) + 1;
                 const pct = Math.round((arenaState.correctCount / 9) * 100);
                 playSound("win");
                 awardRewards(arenaState.correctCount * 30 + 30, arenaState.correctCount * 6 + 10, "کارنامه آزمون جامع صادر شد!");
@@ -4436,19 +3606,22 @@
             const qObj = arenaState.questions[arenaState.idx];
             let statusHeader = "";
             if (arenaState.mode === "duel") {
-                const rivalTag = arenaState.isRealPlayer
-                    ? `<span class="text-[10px] text-indigo-300 font-bold block">داوطلب واقعی (${arenaState.rivalXp} XP)</span>`
-                    : `<span class="text-[10px] text-slate-400 font-bold block">حالت تمرینی (منتظر ورود داوطلبان)</span>`;
+                const liveBanner = arenaState.isOnlineLive
+                    ? (activeOnlineDuel && activeOnlineDuel.status === "pending"
+                        ? `<div class="text-[11px] font-black text-amber-300 bg-amber-500/15 border border-amber-500/30 rounded-xl px-3 py-1.5 text-center animate-pulse">⏳ در انتظار قبول دعوت توسط ${arenaState.rivalName} (می‌توانید شروع کنید)...</div>`
+                        : `<div class="text-[11px] font-black text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 rounded-xl px-3 py-1.5 text-center">🟢 دوئل آنلاین همزمان با ${arenaState.rivalName}</div>`)
+                    : `<div class="text-[10px] text-slate-400 font-bold text-center">حالت تمرینی سریع</div>`;
+
                 statusHeader = `
                     <div class="space-y-2.5 bg-indigo-500/10 border border-indigo-500/25 p-3 rounded-2xl">
+                        ${liveBanner}
                         <div class="flex items-center justify-between text-xs font-black gap-2">
                             <div class="text-right">
                                 <span class="text-emerald-400">${state.avatar} شما: ${arenaState.myScore}</span>
                             </div>
                             <span class="px-2.5 py-1 rounded-xl bg-slate-900/70 text-[11px]">سوال ${arenaState.idx + 1}/5</span>
                             <div class="text-left">
-                                <span class="text-rose-400">${arenaState.rivalAvatar || "🧬"} ${arenaState.rivalName}: ${arenaState.rivalScore}</span>
-                                ${rivalTag}
+                                <span id="live-rival-score" class="text-rose-400">${arenaState.rivalAvatar || "🧬"} ${arenaState.rivalName}: ${arenaState.rivalScore}${arenaState.isOnlineLive ? ` (${arenaState.rivalProgress || 0}/5)` : ""}</span>
                             </div>
                         </div>
                         <div class="space-y-1">
@@ -4482,10 +3655,11 @@
                 <div class="space-y-4 animate-pop">
                     <div class="flex justify-between items-center">
                         <button onclick="exitArena()" class="text-xs font-bold text-slate-400 hover:text-white">✕ انصراف</button>
-                        <span class="text-[11px] font-bold text-slate-400">${qObj.chapTitle}</span>
+                        <span class="text-[11px] font-bold text-slate-400">${qObj.chapTitle || "زیست یازدهم"}</span>
                     </div>
                     ${statusHeader}
                     <p class="text-sm sm:text-base font-black leading-relaxed">${qObj.q}</p>
+                    ${renderQuestionImageBlock(qObj)}
                     <div class="space-y-2.5" id="arena-options">
                         ${qObj.options.map((opt, idx) => `
                             <button onclick="answerArena(${idx})" class="w-full text-right p-3.5 rounded-2xl bg-slate-200/70 dark:bg-slate-900 border border-slate-300/60 dark:border-slate-800 hover:border-indigo-500 text-xs sm:text-sm font-bold transition">
@@ -4511,6 +3685,7 @@
             state.totalAnswered++;
             if (isCorrect) {
                 state.totalCorrect++;
+                state.dailyCorrect = (state.dailyCorrect || 0) + 1;
                 playSound("correct");
                 buttons[chosenIdx].className = "w-full text-right p-3.5 rounded-2xl bg-emerald-500/25 border border-emerald-500 text-emerald-400 text-xs sm:text-sm font-black";
                 if (arenaState.mode === "duel") arenaState.myScore++;
@@ -4523,7 +3698,7 @@
                 if (arenaState.mode === "survival") arenaState.hearts--;
             }
 
-            if (arenaState.mode === "duel" && Math.random() < 0.65) {
+            if (arenaState.mode === "duel" && !arenaState.isOnlineLive && Math.random() < 0.65) {
                 arenaState.rivalScore++;
             }
             saveState();
@@ -4531,6 +3706,9 @@
             setTimeout(() => {
                 arenaState.idx++;
                 arenaState.locked = false;
+                if (arenaState.isOnlineLive) {
+                    pushLiveDuelProgress();
+                }
                 renderArenaGameplay();
             }, 850);
         }
@@ -4567,7 +3745,6 @@
             const localReg = JSON.parse(localStorage.getItem(USERS_DB_KEY)) || {};
             const mergedMap = {};
 
-            // Only include real registered/logged-in users (no pre-populated fake users)
             Object.values(localReg).forEach(u => {
                 if (!u || !u.userId || String(u.userId).startsWith("bot_")) return;
                 mergedMap[u.userId] = {
@@ -4666,7 +3843,10 @@
                             <span class="text-xl">${u.avatar}</span>
                             <span class="text-xs sm:text-sm font-black truncate">${u.username} ${isMe ? "(شما)" : ""}</span>
                         </div>
-                        <span class="text-xs font-black text-emerald-400 shrink-0">${u.xp} XP</span>
+                        <div class="flex items-center gap-2 shrink-0">
+                            ${!isMe ? `<button onclick="sendOnlineDuelInvitation('${u.userId}')" class="px-2.5 py-1 rounded-lg bg-indigo-600/20 hover:bg-indigo-600 text-indigo-300 hover:text-white text-[10px] font-black transition">دوئل ⚔️</button>` : ""}
+                            <span class="text-xs font-black text-emerald-400">${u.xp} XP</span>
+                        </div>
                     </div>
                 `;
             }).join("");
@@ -4832,7 +4012,6 @@
 
         function startNewUserRegistration() {
             closeDialog();
-            // Save current user's progress in registry before switching
             saveUserToLocalRegistry();
             state = {
                 ...DEFAULT_STATE,
